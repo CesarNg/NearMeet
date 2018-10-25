@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "249433642550",
+    "firebase_url": "https://nearmeet-c4e8b.firebaseio.com",
+    "project_id": "nearmeet-c4e8b",
+    "storage_bucket": "nearmeet-c4e8b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249433642550:android:1d4e8cbf5d0dd449",
+        "android_client_info": {
+          "package_name": "com.hfad.nearmeet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "249433642550-pip7ooken8uoir5pj6aj8mte96jq31do.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoKOUMEgwauZwRnAuMF0MpYJLJ3B0T6sM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
