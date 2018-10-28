@@ -2,6 +2,7 @@ package com.hfad.nearmeet;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
+
+
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -119,8 +122,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+
+                            startProfileActivity();
+
+                            /*FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);*/
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -234,6 +240,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-
+    // 3 - Launching Profile Activity
+    private void startProfileActivity(){
+        mEmailField.setText(" ");
+        mPasswordField.setText(" ");
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
 }
