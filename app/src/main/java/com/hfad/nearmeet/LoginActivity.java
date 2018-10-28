@@ -22,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import api.UserHelper;
+
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -37,7 +39,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // [END declare_auth]
 
     private static final String TAG = "EmailPassword";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            createUserInFirestore();
                             updateUI(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -123,10 +126,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
 
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
                             startProfileActivity();
-
-                            /*FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);*/
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -247,5 +249,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
+
+
+    private void createUserInFirestore(){
+
+        if (this.getCurrentUser() != null){
+
+            String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
+            String username = this.getCurrentUser().getDisplayName();
+            String uid = this.getCurrentUser().getUid();
+
+            UserHelper.createUser(uid, username, urlPicture).addOnFailureListener(this.onFailureListener());
+        }
+    }
+
 
 }

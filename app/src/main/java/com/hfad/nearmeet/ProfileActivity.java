@@ -12,6 +12,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import api.UserHelper;
+import model.User;
 
 public class ProfileActivity extends BaseActivity implements View.OnClickListener{
 
@@ -25,6 +29,9 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     // 2 - Identify each Http Request
     private static final int SIGN_OUT_TASK = 10;
     private static final int DELETE_USER_TASK = 20;
+
+    // Creating identifier to identify REST REQUEST (Update username)
+    private static final int UPDATE_USERNAME = 30;
 
 
 
@@ -44,6 +51,19 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
         this.updateUIWhenCreating();
     }
+
+    private void updateUsernameInFirebase(){
+
+        this.progressBar.setVisibility(View.VISIBLE);
+        String username = this.textInputEditTextUsername.getText().toString();
+
+        if (this.getCurrentUser() != null){
+            if (!username.isEmpty() &&  !username.equals(getString(R.string.info_no_username_found))){
+                UserHelper.updateUsername(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
+            }
+        }
+    }
+
 
 
 
@@ -66,11 +86,18 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
             //Get email & username from Firebase
             String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
-            String username = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
-
-            //Update views with data
-            this.textInputEditTextUsername.setText(username);
             this.textViewEmail.setText(email);
+
+            // 7 - Get additional data from Firestore (isMentor & Username)
+            UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User currentUser = documentSnapshot.toObject(User.class);
+                    String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
+                    textInputEditTextUsername.setText(username);
+                }
+            });
+
         }
     }
 
@@ -87,17 +114,18 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
     private void deleteUserFromFirebase(){
         if (this.getCurrentUser() != null) {
+
+            // We also delete user from firestore storage
+            UserHelper.deleteUser(this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener());
+
             AuthUI.getInstance()
                     .delete(this)
                     .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));
         }
     }
 
-    // --------------------
-    // UI
-    // --------------------
 
-    // 3 - Create OnCompleteListener called after tasks ended
+    // Create OnCompleteListener called after tasks ended
     private OnSuccessListener<? super Void> updateUIAfterRESTRequestsCompleted(final int origin){
         return new OnSuccessListener<Void>() {
             @Override
@@ -109,6 +137,11 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                     case DELETE_USER_TASK:
                         finish();
                         break;
+
+                    case UPDATE_USERNAME:
+                        progressBar.setVisibility(View.INVISIBLE);
+                        break;
+
                     default:
                         break;
                 }
@@ -124,7 +157,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         } else if (i == R.id.profile_activity_button_delete) {
             this.deleteUserFromFirebase();
         } else if (i == R.id.profile_activity_button_update) {
-            //Todo
+            this.updateUsernameInFirebase();
         }
     }
 }
