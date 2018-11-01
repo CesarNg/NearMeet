@@ -1,6 +1,8 @@
 package com.hfad.nearmeet;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -14,10 +16,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import api.UserHelper;
 
 
-
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends BaseActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,
@@ -34,8 +36,10 @@ public class MainActivity extends AppCompatActivity implements
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean mPermissionDenied = false;
+    private boolean visible = true;
 
     private GoogleMap mMap;
+    GPS_Service gps;
 
 
     @Override
@@ -61,7 +65,18 @@ public class MainActivity extends AppCompatActivity implements
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
-            Toast.makeText(this,"permission ok",Toast.LENGTH_SHORT).show();
+        }
+        gps = new GPS_Service(MainActivity.this,"50");
+        startService(new Intent(MainActivity.this,GPS_Service.class));
+
+        if(gps.canGetLocation()){
+            String ID = this.getCurrentUser().getUid();
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            //UserHelper.updateLocalisation(ID, latitude, longitude);
+            Toast.makeText(MainActivity.this, latitude+" ::: "+ longitude, Toast.LENGTH_SHORT).show();
+        }else{
+            gps.showSettingsAlert();
         }
     }
 
@@ -69,9 +84,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        // TODO: Before enabling the My Location layer, you must request
-        // location permission from the user. This sample does not include
-        // a request for location permission.
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         enableMyLocation();
@@ -117,6 +129,10 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public void switchClick(android.view.View view)
+    {
+        visible=!visible;
+    }
     /**
      * Displays a dialog with error message explaining that the location permission is missing.
      */
