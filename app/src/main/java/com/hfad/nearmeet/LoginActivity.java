@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.GeoPoint;
 
 import api.UserHelper;
 
@@ -258,8 +259,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
+            GeoPoint localisation = null;
 
-            UserHelper.createUser(uid, username, urlPicture).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture, localisation).addOnFailureListener(this.onFailureListener());
         }
     }
 
