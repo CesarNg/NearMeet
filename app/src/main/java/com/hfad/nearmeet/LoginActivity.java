@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.GeoPoint;
 
 import api.UserHelper;
 
@@ -127,6 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             Log.d(TAG, "signInWithEmail:success");
 
                             FirebaseUser user = mAuth.getCurrentUser();
+                            UserHelper.update_isOnline(true, getCurrentUser().getUid());
                             updateUI(user);
                             startProfileActivity();
                         } else {
@@ -149,6 +151,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void signOut() {
+        UserHelper.update_isOnline(false, getCurrentUser().getUid());
         mAuth.signOut();
         updateUI(null);
     }
@@ -246,10 +249,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void startProfileActivity(){
         mEmailField.setText(" ");
         mPasswordField.setText(" ");
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+    }
 
     private void createUserInFirestore(){
 
@@ -258,8 +267,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
+            GeoPoint localisation = null;
 
-            UserHelper.createUser(uid, username, urlPicture).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture, localisation).addOnFailureListener(this.onFailureListener());
         }
     }
 
