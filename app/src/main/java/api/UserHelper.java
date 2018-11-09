@@ -44,6 +44,10 @@ public class UserHelper {
     public static Task<Void> updateLocalisation(GeoPoint localisation, String uid){
         return UserHelper.getUsersCollection().document(uid).update("localisation",localisation);
     }
+    
+    public static Task<Void> update_isOnline(Boolean online, String uid){
+        return UserHelper.getUsersCollection().document(uid).update("isOnline",online);
+    }
 
     // --- DELETE ---
 
