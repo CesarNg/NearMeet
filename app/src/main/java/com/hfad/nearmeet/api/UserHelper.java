@@ -1,4 +1,4 @@
-package api;
+package com.hfad.nearmeet.api;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
-import model.User;
+import com.hfad.nearmeet.Model.User;
 
 public class UserHelper {
 

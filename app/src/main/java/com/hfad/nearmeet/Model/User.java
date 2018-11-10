@@ -1,4 +1,4 @@
-package model;
+package com.hfad.nearmeet.Model;
 
 import android.support.annotation.Nullable;
 

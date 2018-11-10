@@ -115,5 +115,42 @@
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
     <string name="permission_required_toast">Location permission is required for this demo.</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Home</string>
+    <string name="nav_profil">Profil</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_about_us">About Us</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Profil</item>
+        <item>Settings</item>
+    </string-array>
+
+    <!-- FRIEND_CHAT ACTIVITY -->
+    <string name="toolbar_title_friend_chat_activity">Chats de discussions</string>
+    <string name="text_input_title_friend_chat_activity">Composer votre message</string>
+    <string name="button_title_friend_chat_activity">ENVOYER</string>
+    <string name="text_view_friend_chat_error">Ce fil de discussion ne contient pour le moment aucun message&#8230;</string>
+    <string name="popup_title_permission_files_access">Cette application a besoin de permission pour fonctionner.</string>
+    <string name="toast_title_no_image_chosen">Aucune image choisie&#8230;</string>
+
+
+    <string name="activity_title_about_us">About Us</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

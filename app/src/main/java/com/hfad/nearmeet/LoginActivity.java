@@ -1,17 +1,11 @@
 package com.hfad.nearmeet;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
 
-import api.UserHelper;
+import com.hfad.nearmeet.api.UserHelper;
 
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -247,7 +241,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void startProfileActivity(){
         mEmailField.setText(" ");
         mPasswordField.setText(" ");
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, NavigationDrawerActivity.class);
         startActivity(intent);
     }
 

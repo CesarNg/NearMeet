@@ -14,8 +14,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import api.UserHelper;
-import model.User;
+import com.hfad.nearmeet.Model.User;
+import com.hfad.nearmeet.api.UserHelper;
 
 public class ProfileActivity extends BaseActivity implements View.OnClickListener{
 
