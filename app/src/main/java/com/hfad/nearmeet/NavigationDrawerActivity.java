@@ -1,9 +1,13 @@
 package com.hfad.nearmeet;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +18,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.hfad.nearmeet.Model.User;
+import com.hfad.nearmeet.api.UserHelper;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class NavigationDrawerActivity extends BaseActivity
@@ -29,6 +45,11 @@ public class NavigationDrawerActivity extends BaseActivity
     private  NavigationView navigationView;
     private DrawerLayout drawer;
 
+    private ImageView imageViewProfile;
+    private TextView textUsername;
+    private TextView textViewEmail;
+    private View view;
+
     public NavigationDrawerActivity() {
     }
 
@@ -36,6 +57,7 @@ public class NavigationDrawerActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,7 +70,15 @@ public class NavigationDrawerActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        view =  navigationView.getHeaderView(0);
+        imageViewProfile = view.findViewById(R.id.imageUser);
+        textUsername = view.findViewById(R.id.username_text);
+        textViewEmail = view.findViewById(R.id.email_text);
+
+
         this.showFirstFragment();
+
+        this.updateUIWhenCreating();
     }
 
     @Override
@@ -156,5 +186,35 @@ public class NavigationDrawerActivity extends BaseActivity
             this.navigationView.getMenu().getItem(0).setChecked(true);
         }
     }
+
+    private void updateUIWhenCreating(){
+
+        if (this.getCurrentUser() != null){
+
+            //Get picture URL from Firebase
+            if (this.getCurrentUser().getPhotoUrl() != null) {
+                Glide.with(this)
+                        .load(this.getCurrentUser().getPhotoUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageViewProfile);
+            }
+
+            //Get email & username from Firebase
+            String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
+            textViewEmail.setText(email);
+
+            // 7 - Get additional data from Firestore ( Username)
+            UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User currentUser = documentSnapshot.toObject(User.class);
+                    String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
+                    textUsername.setText(username);
+                }
+            });
+
+        }
+    }
+
 
 }
