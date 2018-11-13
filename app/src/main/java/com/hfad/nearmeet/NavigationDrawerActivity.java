@@ -22,8 +22,10 @@ public class NavigationDrawerActivity extends BaseActivity
 
     private Fragment fragmentHome;
     private Fragment fragmentProfil;
+    private Fragment fragmentChat;
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_PROFIL = 1;
+    private static final int FRAGMENT_CHAT = 2;
     private  NavigationView navigationView;
     private DrawerLayout drawer;
 
@@ -36,15 +38,6 @@ public class NavigationDrawerActivity extends BaseActivity
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -101,7 +94,7 @@ public class NavigationDrawerActivity extends BaseActivity
         } else if (id == R.id.nav_profil) {
             this.showFragment(FRAGMENT_PROFIL);
         } else if (id == R.id.nav_chat){
-            this.startFriendChatActivity();
+            this.showFragment(FRAGMENT_CHAT);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -123,6 +116,9 @@ public class NavigationDrawerActivity extends BaseActivity
             case FRAGMENT_PROFIL:
                 this.showProfilFragment();
                 break;
+            case FRAGMENT_CHAT:
+                this.showChatFragment();
+                break;
             default:
                 break;
         }
@@ -136,6 +132,11 @@ public class NavigationDrawerActivity extends BaseActivity
     private void showProfilFragment(){
         if (this.fragmentProfil == null) this.fragmentProfil = ProfilFragment.newInstance(null,null);
         this.startTransactionFragment(this.fragmentProfil);
+    }
+
+    private void showChatFragment(){
+        if (this.fragmentChat == null) this.fragmentChat = FriendChatFragment.newInstance(null,null);
+        this.startTransactionFragment(this.fragmentChat);
     }
 
 

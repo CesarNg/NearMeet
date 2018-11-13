@@ -244,7 +244,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mEmailField.setText(" ");
         mPasswordField.setText(" ");
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, NavigationDrawerActivity.class);
         startActivity(intent);
     }
 
