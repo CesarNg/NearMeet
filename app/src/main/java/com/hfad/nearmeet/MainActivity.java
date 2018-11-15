@@ -33,7 +33,7 @@ import org.imperiumlabs.geofirestore.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import api.UserHelper;
+import com.hfad.nearmeet.api.UserHelper;
 
 
 public class MainActivity extends BaseActivity implements

@@ -148,4 +148,6 @@ public class FriendChatActivity extends BaseActivity implements FriendChatAdapte
         // 7 - Show TextView in case RecyclerView is empty
         textViewRecyclerViewEmpty.setVisibility(this.FriendChatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
+
+
 }

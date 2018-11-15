@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -12,8 +13,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,17 +33,22 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.UserHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ProfilFragment extends Fragment {
+public class ProfilFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
 
     @BindView(R.id.profile_fragment_imageview_profile) ImageView imageViewProfile;
     @BindView(R.id.profile_fragment_edit_text_username) TextInputEditText textInputEditTextUsername;
     @BindView(R.id.profile_fragment_text_view_email) TextView textViewEmail;
     @BindView(R.id.profile_fragment_progress_bar) ProgressBar progressBar;
+    @BindView(R.id.spinner)Spinner spinner;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -100,6 +110,32 @@ public class ProfilFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        spinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("100 M");
+        categories.add("200 M");
+        categories.add("300 M");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+
+
+       /* ArrayAdapter<String> adapterFillClass = ArrayAdapter.createFromResource(getActivity(),
+                ,
+                android.R.layout.simple_spinner_dropdown_item);*/
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -123,6 +159,19 @@ public class ProfilFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String item = parent.getItemAtPosition(position).toString();
+
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     /**
@@ -240,6 +289,7 @@ public class ProfilFragment extends Fragment {
                 .setNegativeButton(R.string.popup_message_choice_no, null)
                 .show();
     }
+
 
     @OnClick(R.id.profile_fragment_button_update)
     public void onClickUpdateButton() { this.updateUsernameInFirebase(); }
