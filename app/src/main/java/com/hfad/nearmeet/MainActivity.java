@@ -33,7 +33,7 @@ import org.imperiumlabs.geofirestore.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import api.UserHelper;
+import com.hfad.nearmeet.api.UserHelper;
 
 
 public class MainActivity extends BaseActivity implements
@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity implements
     private boolean mPermissionDenied = false;
     private boolean visible = false;
     private List<Marker> markers;
+    private ArrayList<String> idPeopleNear;
 
     private GoogleMap mMap;
     private Location current_location =  new Location("mainActivity");
@@ -68,9 +69,10 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         markers = new ArrayList<>();
+        idPeopleNear = new ArrayList<>();
 
         SupportMapFragment mapFragment =
-               (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
     }
@@ -198,68 +200,79 @@ public class MainActivity extends BaseActivity implements
         visible=!visible;
         if (visible) {
             GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(current_location.getLatitude(), current_location.getLongitude()), 0.6);
-        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-            @Override
-            public void onKeyEntered(String documentID, GeoPoint location) {
-                final String docID = documentID;
-                final GeoPoint locat = location;
-                db.collection("users")
-                        .whereEqualTo("uid", documentID)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
+            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String documentID, GeoPoint location) {
+                    final String docID = documentID;
+                    final GeoPoint locat = location;
+                    db.collection("users")
+                            .whereEqualTo("uid", documentID)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                        if (!docID.equals(getCurrentUser().getUid()) && document.get("isOnline").equals(true)) {
-                                            Marker marker = mMap.addMarker(new MarkerOptions()
-                                                    .position(new LatLng(locat.getLatitude(), locat.getLongitude()))
-                                                    .title(docID)
-                                            );
-                                            markers.add(marker);
-                                            System.out.println(String.format("Document %s, %s entered the search area at [%f,%f]", docID, getCurrentUser().getUid(), locat.getLatitude(), locat.getLongitude()));
+                                            if (!docID.equals(getCurrentUser().getUid()) && document.get("isOnline").equals(true)) {
+                                                Marker marker = mMap.addMarker(new MarkerOptions()
+                                                        .position(new LatLng(locat.getLatitude(), locat.getLongitude()))
+                                                        .title(docID)
+                                                );
+                                                markers.add(marker);
+                                                if (!idPeopleNear.contains(docID)) idPeopleNear.add(docID);
+                                                System.out.println(String.format("Document %s, %s entered the search area at [%f,%f]", docID, getCurrentUser().getUid(), locat.getLatitude(), locat.getLongitude()));
+                                            }
                                         }
+                                    } else {
+                                        Log.d("MainActivity", "Error getting documents: ", task.getException());
                                     }
-                                } else {
-                                    Log.d("MainActivity", "Error getting documents: ", task.getException());
                                 }
-                            }
-                        });
+                            });
 
-            }
-
-            @Override
-            public void onKeyExited(String documentID) {
-                for (int i = 0; i<markers.size(); i++) {
-                    if (markers.get(i).getTitle().equals(documentID))
-                    {
-                        markers.get(i).remove();
-                    }
                 }
-                System.out.println(String.format("Document %s is no longer in the search area", documentID));
-            }
+                @Override
+                public void onKeyExited(String documentID) {
+                    for (int i = 0; i<markers.size(); i++) {
+                        if (markers.get(i).getTitle().equals(documentID))
+                        {
+                            markers.remove(i);
+                            idPeopleNear.remove(i);
+                        }
+                    }
+                    System.out.println(String.format("Document %s is no longer in the search area", documentID));
+                }
 
-            @Override
-            public void onKeyMoved(String documentID, GeoPoint location) {
-                System.out.println(String.format("Document %s moved within the search area to [%f,%f]", documentID, location.getLatitude(), location.getLongitude()));
-            }
+                @Override
+                public void onKeyMoved(String documentID, GeoPoint location) {
+                    System.out.println(String.format("Document %s moved within the search area to [%f,%f]", documentID, location.getLatitude(), location.getLongitude()));
+                }
 
-            @Override
-            public void onGeoQueryReady() {
-                System.out.println("All initial data has been loaded and events have been fired!");
-            }
+                @Override
+                public void onGeoQueryReady() {
+                    System.out.println("All initial data has been loaded and events have been fired!");
+                }
 
-            @Override
-            public void onGeoQueryError(Exception exception) {
-                System.err.println("There was an error with this query: " + exception.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onGeoQueryError(Exception exception) {
+                    System.err.println("There was an error with this query: " + exception.getLocalizedMessage());
+                }
+            });
         }
         else {
             mMap.clear();
         }
     }
+
+
+    public void showListPeople(android.view.View view)
+    {
+        //Intent intent = new Intent(this, ListPeopleFragment.class);
+        //intent.putStringArrayListExtra("PeopleNear",idPeopleNear);
+        //startActivity(intent);
+    }
+
+
     /**
      * Displays a dialog with error message explaining that the location permission is missing.
      */
