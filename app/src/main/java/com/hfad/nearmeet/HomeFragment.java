@@ -1,5 +1,7 @@
 package com.hfad.nearmeet;
 
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +14,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,6 +50,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,6 +96,7 @@ public class HomeFragment extends Fragment  implements
 
     private GoogleMap mMap;
     private Location current_location =  new Location("mainActivity");
+    private ArrayList<String> idPeopleNear;
     GPS_Service gps;
 
     public HomeFragment() {
@@ -123,6 +128,7 @@ public class HomeFragment extends Fragment  implements
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -133,10 +139,11 @@ public class HomeFragment extends Fragment  implements
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
 
-        markers = new ArrayList<>();
-
         SupportMapFragment mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         mMapFragment.getMapAsync(this);
+
+        markers = new ArrayList<>();
+        idPeopleNear = new ArrayList<>();
 
         return view;
     }
@@ -278,7 +285,8 @@ public class HomeFragment extends Fragment  implements
         super.onDestroy();
     }
 
-    public void switchClick(android.view.View view)
+    @OnClick(R.id.visible_switch)
+    public void switchClick()
     {
         visible=!visible;
         if (visible) {
@@ -303,6 +311,7 @@ public class HomeFragment extends Fragment  implements
                                                         .title(docID)
                                                 );
                                                 markers.add(marker);
+                                                if (!idPeopleNear.contains(docID)) idPeopleNear.add(docID);
                                                 System.out.println(String.format("Document %s, %s entered the search area at [%f,%f]", docID, getCurrentUser().getUid(), locat.getLatitude(), locat.getLongitude()));
                                             }
                                         }
@@ -359,6 +368,23 @@ public class HomeFragment extends Fragment  implements
         void onFragmentInteraction(Uri uri);
     }
 
+    @OnClick(R.id.list_people)
+    public void showListPeople()
+    {
+        Intent intent = new Intent(this.getActivity(), ListPeopleActivity.class);
+        intent.putStringArrayListExtra("PeopleNear",idPeopleNear);
+        PendingIntent pendingIntent =
+                TaskStackBuilder.create(this.getActivity())
+                        // add all of DetailsActivity's parents to the stack,
+                        // followed by DetailsActivity itself
+                        .addNextIntentWithParentStack(intent)
+                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this.getActivity());
+        builder.setContentIntent(pendingIntent);
+
+        getActivity().startActivity(intent);
+    }
 
     @Nullable
     protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
