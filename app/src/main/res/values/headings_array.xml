@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="champ_recherche">
+        <item>100 M</item>
+        <item>200 M</item>
+        <item>300 M</item>
+        <item>400 M</item>
+    </string-array>
+</resources>
