@@ -71,6 +71,8 @@ public class MainActivity extends BaseActivity implements
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
+        UserHelper.updateIsOnline(true, getCurrentUser().getUid());
+
     }
 
     @Override
@@ -188,7 +190,10 @@ public class MainActivity extends BaseActivity implements
     protected void onDestroy()
     {
         UserHelper.updateIsOnline(false, getCurrentUser().getUid());
+        Log.d("MAIN Activity", "Hello"+getCurrentUser().getUid());
+
         super.onDestroy();
+
     }
 
     public void switchClick(android.view.View view)
