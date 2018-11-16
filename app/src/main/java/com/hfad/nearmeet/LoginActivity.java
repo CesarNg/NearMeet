@@ -122,7 +122,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             Log.d(TAG, "signInWithEmail:success");
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            UserHelper.update_isOnline(true, getCurrentUser().getUid());
+                            UserHelper.updateIsOnline(true, getCurrentUser().getUid());
                             updateUI(user);
                             startProfileActivity();
                         } else {
@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void signOut() {
-        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         mAuth.signOut();
         updateUI(null);
     }
@@ -252,7 +252,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onDestroy()
     {
         super.onDestroy();
-        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
     }
 
     private void createUserInFirestore(){
@@ -264,8 +264,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String uid = this.getCurrentUser().getUid();
             GeoPoint localisation = null;
             String champRecherche = "100 M";
+            Boolean isVisible = false;
 
-            UserHelper.createUser(uid, username, urlPicture, localisation, champRecherche).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture, localisation, champRecherche, isVisible).addOnFailureListener(this.onFailureListener());
         }
     }
 
