@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="first">100m</string>
-    <string name="second">200m</string>
-    <string name="three">300m</string>
-    <string name="four">400m</string>
-    <string name="five">500m</string>
-
-</resources>

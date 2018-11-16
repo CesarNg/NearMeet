@@ -20,9 +20,9 @@ public class UserHelper {
 
     // --- CREATE ---
 
-    public static Task<Void> createUser(String uid, String username, String urlPicture, GeoPoint localisation) {
+    public static Task<Void> createUser(String uid, String username, String urlPicture, GeoPoint localisation, String champRecherche) {
         //  Create User object
-        User userToCreate = new User(uid, username, urlPicture, localisation);
+        User userToCreate = new User(uid, username, urlPicture, localisation, champRecherche);
         //  Add a new User Document to Firestore
         return UserHelper.getUsersCollection()
                 .document(uid) // Setting uID for Document
@@ -43,6 +43,11 @@ public class UserHelper {
 
     public static Task<Void> updateLocalisation(GeoPoint localisation, String uid){
         return UserHelper.getUsersCollection().document(uid).update("localisation",localisation);
+    }
+
+    public static Task<Void> updateChampRecherche (String champRecherche, String uid){
+
+        return UserHelper.getUsersCollection().document(uid).update("champRecherche", champRecherche);
     }
     
     public static Task<Void> update_isOnline(Boolean online, String uid){

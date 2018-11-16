@@ -63,11 +63,14 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
 
     // Creating identifier to identify REST REQUEST (Update username)
     private static final int UPDATE_USERNAME = 30;
+    private static final int UPDATE_CHAMP_RECHERCHE = 40;
 
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String champRecherche;
+    private ArrayAdapter dataAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,6 +107,11 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         ButterKnife.bind(this, view);
 
+        spinner.setOnItemSelectedListener(this);
+
+        // Creating adapter for spinner
+        dataAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.champ_recherche, android.R.layout.simple_spinner_item);
+
         this.updateUIWhenCreating();
 
         return view;
@@ -114,27 +122,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        spinner.setOnItemSelectedListener(this);
 
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("100 M");
-        categories.add("200 M");
-        categories.add("300 M");
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
-
-
-       /* ArrayAdapter<String> adapterFillClass = ArrayAdapter.createFromResource(getActivity(),
-                ,
-                android.R.layout.simple_spinner_dropdown_item);*/
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -163,9 +151,9 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String item = parent.getItemAtPosition(position).toString();
+        champRecherche = parent.getItemAtPosition(position).toString();
 
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        Toast.makeText(parent.getContext(), "Selected: " + champRecherche, Toast.LENGTH_LONG).show();
 
     }
 
@@ -190,7 +178,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
 
-    private void updateUsernameInFirebase(){
+    private void updateInfoInFirebase(){
 
         this.progressBar.setVisibility(View.VISIBLE);
         String username = this.textInputEditTextUsername.getText().toString();
@@ -199,7 +187,12 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
             if (!username.isEmpty() &&  !username.equals(getString(R.string.info_no_username_found))){
                 UserHelper.updateUsername(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
             }
+
+            UserHelper.updateChampRecherche(champRecherche,this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_CHAMP_RECHERCHE));
+
         }
+
+
     }
 
     private void updateUIWhenCreating(){
@@ -214,21 +207,28 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
                         .into(imageViewProfile);
             }
 
+
             //Get email & username from Firebase
             String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
             textViewEmail.setText(email);
 
-            // 7 - Get additional data from Firestore (isMentor & Username)
+            // 7 - Get additional data from Firestore (champRecherche & Username)
             UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     User currentUser = documentSnapshot.toObject(User.class);
                     String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
                     textInputEditTextUsername.setText(username);
+                    champRecherche = currentUser.getChampRecherche();
+                    spinner.setAdapter(dataAdapter);
+                    selectSpinnerChampRecherche(champRecherche);
+
+
                 }
             });
 
         }
+
     }
 
     private void signOutUserFromFirebase(){
@@ -292,7 +292,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
 
 
     @OnClick(R.id.profile_fragment_button_update)
-    public void onClickUpdateButton() { this.updateUsernameInFirebase(); }
+    public void onClickUpdateButton() { this.updateInfoInFirebase(); }
 
     public FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
@@ -303,6 +303,16 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
                 Toast.makeText(getActivity(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG).show();
             }
         };
+    }
+
+    private void selectSpinnerChampRecherche (String str){
+
+        for (int i=0 ; i< dataAdapter.getCount(); i++ ){
+
+            if(spinner.getItemAtPosition(i).toString().equals(str)){
+                spinner.setSelection(i);
+            }
+        }
     }
 
 }

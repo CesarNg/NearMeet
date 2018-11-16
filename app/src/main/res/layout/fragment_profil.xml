@@ -110,7 +110,7 @@
         android:gravity="bottom"
         android:orientation="vertical">
 
-        <!-- BUTTON UPDATE USERNAME -->
+        <!-- BUTTON UPDATE INFO -->
         <Button
             android:id="@+id/profile_fragment_button_update"
             style="?android:attr/borderlessButtonStyle"
