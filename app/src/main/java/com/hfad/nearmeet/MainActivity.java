@@ -190,8 +190,6 @@ public class MainActivity extends BaseActivity implements
     protected void onDestroy()
     {
         UserHelper.updateIsOnline(false, getCurrentUser().getUid());
-        Log.d("MAIN Activity", "Hello"+getCurrentUser().getUid());
-
         super.onDestroy();
 
     }
