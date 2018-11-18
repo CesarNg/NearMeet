@@ -41,7 +41,8 @@
     <string name="signed_out">Signed Out</string>
     <string name="token_null">Token: null</string>
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_confirm_password">Confirmer le mot de passe</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
     <string name="auth_failed">Authentication failed</string>
     <string name="start_phone_auth">Start</string>
@@ -98,7 +99,14 @@
     <string name="popup_message_confirmation_delete_account">Es-tu sûr(e) de vouloir supprimer ton compte ?</string>
     <string name="popup_message_choice_yes">Oui !</string>
     <string name="popup_message_choice_no">Non</string>
-    <string name="check_box_is_mentor">Etes-vous un mentor ?</string>
+    <string name="button_facebook_login">Se connecter avec Facebook</string>
+    <string name="button_sign_up">Créer un compte</string>
+    <string name="button_confirm_sign_up">S\'inscrire</string>
+    <string name="button_view_login_form">Se connecter</string>
+
+
+
+
 
     <!-- MAIN ACTIVITY -->
     <string name="visible_text">Visibilité</string>
