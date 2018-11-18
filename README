@@ -1,0 +1,14 @@
+________________________
+| Application NearMeet |
+|______________________|
+
+Auteurs : 
+BEDU Laure BEDL18549600
+NGOY César NGOB02099609
+WALD Eléonore WALE03539707
+
+Minimum API version : 5.1, dûe à l'utilisation des services de localisation et de l'API GoogleMaps.
+(play-services-location et play-services-maps).
+
+Attention : si vous compilez et créez l'APK vous-même depuis AndroidStudio, l'application risque de ne pas fonctionner,
+car vous n'êtes pas enregistré comme utilisateur autorisé à utiliser l'API GoogleMaps. L'APK fournie est fonctionnelle.
