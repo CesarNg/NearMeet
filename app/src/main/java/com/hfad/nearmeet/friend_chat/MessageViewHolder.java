@@ -31,10 +31,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     //PROFILE CONTAINER
     @BindView(R.id.activity_friend_chat_item_profile_container)
     LinearLayout profileContainer;
-    @BindView(R.id.activity_friend_chat_item_profile_container_profile_image)
-    ImageView imageViewProfile;
-    @BindView(R.id.activity_friend_chat_item_profile_container_is_friend_image)
-    ImageView imageViewIsfriend;
+    /*@BindView(R.id.activity_friend_chat_item_profile_container_profile_image)
+    ImageView imageViewProfile;*/
 
     //MESSAGE CONTAINER
     @BindView(R.id.activity_friend_chat_item_message_container)
@@ -81,10 +79,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         //this.imageViewIsfriend.setVisibility(message.getUserSender().getIsfriend() ? View.VISIBLE : View.INVISIBLE);
 
         // Update profile picture ImageView
-        if (message.getUserSender().getUrlPicture() != null)
+       /* if (message.getUserSender().getUrlPicture() != null)
             glide.load(message.getUserSender().getUrlPicture())
                     .apply(RequestOptions.circleCropTransform())
-                    .into(imageViewProfile);
+                    .into(imageViewProfile);*/
 
         // Update image sent ImageView
         if (message.getUrlImage() != null){
