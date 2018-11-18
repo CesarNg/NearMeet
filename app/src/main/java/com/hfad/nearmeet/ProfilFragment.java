@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -12,8 +13,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,17 +33,22 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.UserHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ProfilFragment extends Fragment {
+public class ProfilFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
 
     @BindView(R.id.profile_fragment_imageview_profile) ImageView imageViewProfile;
     @BindView(R.id.profile_fragment_edit_text_username) TextInputEditText textInputEditTextUsername;
     @BindView(R.id.profile_fragment_text_view_email) TextView textViewEmail;
     @BindView(R.id.profile_fragment_progress_bar) ProgressBar progressBar;
+    @BindView(R.id.spinner)Spinner spinner;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -53,11 +63,14 @@ public class ProfilFragment extends Fragment {
 
     // Creating identifier to identify REST REQUEST (Update username)
     private static final int UPDATE_USERNAME = 30;
+    private static final int UPDATE_CHAMP_RECHERCHE = 40;
 
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String champRecherche;
+    private ArrayAdapter dataAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -94,12 +107,23 @@ public class ProfilFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         ButterKnife.bind(this, view);
 
+        spinner.setOnItemSelectedListener(this);
+
+        // Creating adapter for spinner
+        dataAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.champ_recherche, android.R.layout.simple_spinner_item);
+
         this.updateUIWhenCreating();
 
         return view;
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -125,6 +149,19 @@ public class ProfilFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        champRecherche = parent.getItemAtPosition(position).toString();
+
+        Toast.makeText(parent.getContext(), "Selected: " + champRecherche, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -141,7 +178,7 @@ public class ProfilFragment extends Fragment {
     }
 
 
-    private void updateUsernameInFirebase(){
+    private void updateInfoInFirebase(){
 
         this.progressBar.setVisibility(View.VISIBLE);
         String username = this.textInputEditTextUsername.getText().toString();
@@ -150,7 +187,12 @@ public class ProfilFragment extends Fragment {
             if (!username.isEmpty() &&  !username.equals(getString(R.string.info_no_username_found))){
                 UserHelper.updateUsername(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
             }
+
+            UserHelper.updateChampRecherche(champRecherche,this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_CHAMP_RECHERCHE));
+
         }
+
+
     }
 
     private void updateUIWhenCreating(){
@@ -165,21 +207,28 @@ public class ProfilFragment extends Fragment {
                         .into(imageViewProfile);
             }
 
+
             //Get email & username from Firebase
             String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
             textViewEmail.setText(email);
 
-            // 7 - Get additional data from Firestore (isMentor & Username)
+            // 7 - Get additional data from Firestore (champRecherche & Username)
             UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     User currentUser = documentSnapshot.toObject(User.class);
                     String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
                     textInputEditTextUsername.setText(username);
+                    champRecherche = currentUser.getChampRecherche();
+                    spinner.setAdapter(dataAdapter);
+                    selectSpinnerChampRecherche(champRecherche);
+
+
                 }
             });
 
         }
+
     }
 
     private void signOutUserFromFirebase(){
@@ -241,8 +290,9 @@ public class ProfilFragment extends Fragment {
                 .show();
     }
 
+
     @OnClick(R.id.profile_fragment_button_update)
-    public void onClickUpdateButton() { this.updateUsernameInFirebase(); }
+    public void onClickUpdateButton() { this.updateInfoInFirebase(); }
 
     public FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
@@ -253,6 +303,16 @@ public class ProfilFragment extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG).show();
             }
         };
+    }
+
+    private void selectSpinnerChampRecherche (String str){
+
+        for (int i=0 ; i< dataAdapter.getCount(); i++ ){
+
+            if(spinner.getItemAtPosition(i).toString().equals(str)){
+                spinner.setSelection(i);
+            }
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package com.hfad.nearmeet.api;
 
+import android.hardware.usb.UsbRequest;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
@@ -12,18 +14,27 @@ public class MessageHelper {
 
     // --- GET ---
 
-    public static Query getAllMessageForChat(String chat){
+   /* public static Query getAllMessageForChat(String chat){
         return ChatHelper.getChatCollection()
                 .document(chat)
                 .collection(COLLECTION_NAME)
                 .orderBy("dateCreated")
                 .limit(50);
+    }*/
+
+    public static Query getMessageForChat(String chat, String uidReceiver){
+        return ChatHelper.getChatCollection()
+                .document(chat)
+                .collection(COLLECTION_NAME)
+                .whereEqualTo("userReceiver.uid",uidReceiver)
+                .orderBy("dateCreated")
+                .limit(50);
     }
 
-    public static Task<DocumentReference> createMessageForChat(String textMessage, String chat, User userSender){
+    public static Task<DocumentReference> createMessageForChat(String textMessage, String chat, User userSender, User userReceiver){
 
         // 1 - Create the Message object
-        Message message = new Message(textMessage, userSender);
+        Message message = new Message(textMessage, userSender, userReceiver);
 
         // 2 - Store Message to Firestore
         return ChatHelper.getChatCollection()

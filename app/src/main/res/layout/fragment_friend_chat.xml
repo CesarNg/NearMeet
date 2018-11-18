@@ -3,51 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FriendChatFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- BUTTONS CHAT CONTAINER -->
+
         <LinearLayout
-            android:id="@+id/activity_friend_chat_buttons_container"
+            android:id="@+id/activity_header_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:layout_below="@id/activity_friend_chat_buttons_container"
+            android:orientation="horizontal"
+            android:background="@color/colorSand">
 
-            <!-- BUTTON CHAT ANDROID -->
-            <ImageButton
-                android:id="@+id/activity_friend_chat_android_chat_button"
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/default_margin"
                 android:layout_width="wrap_content"
-                android:layout_height="50dip"
-                android:layout_weight="1"
-                android:background="@color/colorGreen"
-                android:src="@drawable/ic_android_white_24dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:tag="10"/>
+                android:layout_height="fill_parent"
+                app:srcCompat="@drawable/ic_anon_user_48dp" />
 
-            <!-- BUTTON CHAT FIREBASE -->
-            <ImageButton
-                android:id="@+id/activity_friend_chat_firebase_chat_button"
+            <TextView
+                android:id="@+id/name_userReceiver"
+                android:layout_marginBottom="@dimen/default_margin"
                 android:layout_width="wrap_content"
-                android:layout_height="50dip"
-                android:layout_weight="1"
-                android:background="@color/colorSandLight"
-                android:src="@drawable/ic_cloud_white_24dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:tag="20"/>
+                android:layout_height="fill_parent"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical"
+                android:text="Name"
+                android:textSize="16sp" />
 
-            <!-- BUTTON CHAT BUG -->
-            <ImageButton
-                android:id="@+id/activity_friend_chat_bug_chat_button"
-                android:layout_width="wrap_content"
-                android:layout_height="50dip"
-                android:layout_weight="1"
-                android:background="@color/colorSand"
-                android:src="@drawable/ic_bug_report_white_24dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:tag="30"/>
 
         </LinearLayout>
 
@@ -59,7 +50,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_above="@id/activity_friend_chat_add_message_container"
-            android:layout_below="@id/activity_friend_chat_buttons_container">
+            android:layout_below="@id/activity_header_container">
 
             <!-- MESSAGE RECYCLER VIEW EMPTY -->
             <TextView
