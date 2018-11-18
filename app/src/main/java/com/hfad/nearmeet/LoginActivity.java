@@ -165,9 +165,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-
                             FirebaseUser user = mAuth.getCurrentUser();
-                            UserHelper.updateIsOnline(true, getCurrentUser().getUid());
                             updateUI(user);
                             startProfileActivity();
                         } else {
@@ -291,9 +289,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     // 3 - Launching Profile Activity
     private void startProfileActivity(){
-        mEmailField.setText(" ");
-        mPasswordField.setText(" ");
-
+        UserHelper.updateIsOnline(true, getCurrentUser().getUid());
         Intent intent = new Intent(this, NavigationDrawerActivity.class);
         startActivity(intent);
     }
@@ -302,7 +298,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onDestroy()
     {
         super.onDestroy();
-        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
+        //UserHelper.updateIsOnline(false, getCurrentUser().getUid());
     }
 
     private void createUserInFirestore(){

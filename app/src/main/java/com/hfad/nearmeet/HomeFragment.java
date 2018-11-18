@@ -271,14 +271,14 @@ public class HomeFragment extends Fragment  implements
     @Override
     public void onStop()
     {
-        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
+       // UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onStop();
     }
 
     @Override
     public void onDestroy()
     {
-        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
+        //UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onDestroy();
     }
 
