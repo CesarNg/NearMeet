@@ -10,6 +10,7 @@ public class User {
     private String username;
     private GeoPoint localisation;
     private Boolean isVisible;
+    private Boolean isOnline;
     private String champRecherche;
     @Nullable
     private String urlPicture;
@@ -23,6 +24,7 @@ public class User {
         this.localisation =localisation ;
         this.champRecherche = champRecherche;
         this.isVisible = isVisible;
+        this.isOnline = false;
 
     }
 
@@ -37,6 +39,7 @@ public class User {
         return localisation;
     }
     public Boolean getIsVisible(){return isVisible;}
+    public Boolean getIsOnline(){return isOnline;}
 
     // --- SETTERS ---
     public void setUsername(String username) { this.username = username; }
@@ -49,4 +52,5 @@ public class User {
     public void setLocalisation(GeoPoint localisation) {
         this.localisation = localisation;
     }
+    public void setIsOnlinee(Boolean isOnline) { this.isOnline = isOnline; }
 }

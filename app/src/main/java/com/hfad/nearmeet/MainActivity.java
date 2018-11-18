@@ -71,14 +71,14 @@ public class MainActivity extends BaseActivity implements
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-        UserHelper.updateIsOnline(true, getCurrentUser().getUid());
+        //UserHelper.updateIsOnline(true, getCurrentUser().getUid());
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        UserHelper.updateIsOnline(true, getCurrentUser().getUid());
+        //UserHelper.updateIsOnline(true, getCurrentUser().getUid());
     }
 
     /**
@@ -182,14 +182,14 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onStop()
     {
-        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
+        //UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
+        //UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onDestroy();
 
     }
