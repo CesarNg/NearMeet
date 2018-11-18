@@ -12,15 +12,14 @@
 
 
         <LinearLayout
-            android:id="@+id/activity_header_container"
+            android:id="@+id/fragment_header_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/activity_friend_chat_buttons_container"
             android:orientation="horizontal"
             android:background="@color/colorSand">
 
             <ImageView
-                android:id="@+id/icon"
+                android:id="@+id/fragment_chat_icon"
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginBottom="@dimen/default_margin"
@@ -45,16 +44,16 @@
 
         <!-- RECYCLER VIEW CONTAINER -->
         <LinearLayout
-            android:id="@+id/activity_friend_chat_recycler_view_container"
+            android:id="@+id/fragment_friend_chat_recycler_view_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_above="@id/activity_friend_chat_add_message_container"
-            android:layout_below="@id/activity_header_container">
+            android:layout_above="@id/fragment_friend_chat_add_message_container"
+            android:layout_below="@id/fragment_header_container">
 
             <!-- MESSAGE RECYCLER VIEW EMPTY -->
             <TextView
-                android:id="@+id/activity_friend_chat_text_view_recycler_view_empty"
+                android:id="@+id/fragment_friend_chat_text_view_recycler_view_empty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_view_friend_chat_error"
@@ -63,7 +62,7 @@
 
             <!-- RECYCLER VIEW -->
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/activity_friend_chat_recycler_view"
+                android:id="@+id/fragment_friend_chat_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -71,15 +70,15 @@
 
         <!-- IMAGE CHOSEN PREVIEW -->
         <ImageView
-            android:id="@+id/activity_friend_chat_image_chosen_preview"
+            android:id="@+id/fragment_friend_chat_image_chosen_preview"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_margin="@dimen/default_margin"
-            android:layout_above="@id/activity_friend_chat_add_message_container"/>
+            android:layout_above="@id/fragment_friend_chat_add_message_container"/>
 
         <!-- ADD MESSAGE CONTAINER -->
         <LinearLayout
-            android:id="@+id/activity_friend_chat_add_message_container"
+            android:id="@+id/fragment_friend_chat_add_message_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -87,7 +86,7 @@
 
             <!-- ADD FILE BUTTON -->
             <ImageButton
-                android:id="@+id/activity_friend_chat_add_file_button"
+                android:id="@+id/fragment_friend_chat_add_file_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -96,7 +95,7 @@
 
             <!-- TEXT MESSAGE EDIT TEXT -->
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/activity_friend_chat_message_edit_text"
+                android:id="@+id/fragment_friend_chat_message_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -107,7 +106,7 @@
 
             <!-- ADD MESSAGE BUTTON -->
             <Button
-                android:id="@+id/activity_friend_chat_send_button"
+                android:id="@+id/fragment_friend_chat_send_button"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

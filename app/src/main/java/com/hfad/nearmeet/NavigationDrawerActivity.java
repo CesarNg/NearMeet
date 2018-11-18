@@ -134,8 +134,8 @@ public class NavigationDrawerActivity extends BaseActivity
 
     private void startFriendChatActivity() {
 
-        Intent myItent = new Intent(this,FriendChatActivity.class);
-        startActivity(myItent);
+       // Intent myItent = new Intent(this,FriendChatActivity.class);
+       // startActivity(myItent);
     }
 
     private void showFragment(int fragmentIdentifier){

@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:textIsSelectable="true"
                     android:textSize="@dimen/default_text_size"
+                    android:textColor="#ffff"
                     tools:text="Text example" />
 
             </LinearLayout>

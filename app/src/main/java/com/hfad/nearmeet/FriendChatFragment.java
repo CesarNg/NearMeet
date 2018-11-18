@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,19 +53,20 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     private static final String ARG_PARAM2 = "param2";
     // FOR DESIGN
     // 1 - Getting all views needed
-    @BindView(R.id.activity_friend_chat_recycler_view)
+    @BindView(R.id.fragment_friend_chat_recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.activity_friend_chat_text_view_recycler_view_empty)
+    @BindView(R.id.fragment_friend_chat_text_view_recycler_view_empty)
     TextView textViewRecyclerViewEmpty;
-    @BindView(R.id.activity_friend_chat_message_edit_text)
+    @BindView(R.id.fragment_friend_chat_message_edit_text)
     TextInputEditText editTextMessage;
-    @BindView(R.id.activity_friend_chat_image_chosen_preview)
+    @BindView(R.id.fragment_chat_icon)
     ImageView imageViewPreview;
     @BindView(R.id.name_userReceiver)
     TextView userReceiverName;
 
 
     private com.hfad.nearmeet.friend_chat.FriendChatAdapter FriendChatAdapter;
+
     @Nullable
     private User modelCurrentUser;
     private User modelUserReceiver;
@@ -111,6 +113,9 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
     }
 
     @Override
@@ -119,11 +124,12 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
 
         View view = inflater.inflate(R.layout.fragment_friend_chat, container, false);
         ButterKnife.bind(this,view);
-        friendUID = "uUqXR95voDXob7xZUAHTfeDOQED3";
+        friendUID = "UeXWHEY1rydaxNXC2VS1wL1IxDC3";
         this.configureRecyclerView(CHAT_NAME_ANDROID);
         // this.configureToolbar();
         this.getCurrentUserFromFirestore();
         this.getUserReceiver();
+
 
         return view;
     }
@@ -153,7 +159,7 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         mListener = null;
     }
 
-    @OnClick(R.id.activity_friend_chat_send_button)
+    @OnClick(R.id.fragment_friend_chat_send_button)
     public void onClickSendMessage() {
 
         // 1 - Check if text field is not empty and current user properly downloaded from Firestore
@@ -164,7 +170,9 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
             this.editTextMessage.setText("");
 
         }
-        this.userReceiverName.setText(modelUserReceiver.getUsername());
+
+        this.updateUIWhenCreating();
+
     }
 
    /* @OnClick({ R.id.activity_friend_chat_android_chat_button, R.id.activity_friend_chat_firebase_chat_button, R.id.activity_friend_chat_bug_chat_button})
@@ -183,7 +191,7 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         }
     }*/
 
-    @OnClick(R.id.activity_friend_chat_add_file_button)
+    @OnClick(R.id.fragment_friend_chat_add_file_button)
     public void onClickAddFile() { }
 
     // --------------------
@@ -218,8 +226,8 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         //Track current chat name
         this.currentChatName = chatName;
         //Configure Adapter & RecyclerView
-       // this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
-        this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getMessageForChat(this.currentChatName,friendUID)), Glide.with(this), this, getCurrentUser().getUid());
+        this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
+       // this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getMessageForChat(this.currentChatName,friendUID)), Glide.with(this), this, getCurrentUser().getUid());
         FriendChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -228,6 +236,8 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(this.FriendChatAdapter);
+
+
     }
 
     // 6 - Create options for RecyclerView from a Query
@@ -242,6 +252,27 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     public void onDataChanged() {
         textViewRecyclerViewEmpty.setVisibility(this.FriendChatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
+
+    private void updateUIWhenCreating(){
+
+        if (this.getCurrentUser() != null){
+
+            //Get picture URL from Firebase
+            if (this.getCurrentUser().getPhotoUrl() != null) {
+                Glide.with(this)
+                        .load(this.getCurrentUser().getPhotoUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageViewPreview);
+            }
+
+
+            this.userReceiverName.setText(modelUserReceiver.getUsername());
+
+        }
+    }
+
+
+
 
 
     /**
