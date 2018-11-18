@@ -60,11 +60,16 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     TextInputEditText editTextMessage;
     @BindView(R.id.activity_friend_chat_image_chosen_preview)
     ImageView imageViewPreview;
+    @BindView(R.id.name_userReceiver)
+    TextView userReceiverName;
+
 
     private com.hfad.nearmeet.friend_chat.FriendChatAdapter FriendChatAdapter;
     @Nullable
     private User modelCurrentUser;
+    private User modelUserReceiver;
     private String currentChatName;
+    private String friendUID;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -114,11 +119,15 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
 
         View view = inflater.inflate(R.layout.fragment_friend_chat, container, false);
         ButterKnife.bind(this,view);
+        friendUID = "uUqXR95voDXob7xZUAHTfeDOQED3";
         this.configureRecyclerView(CHAT_NAME_ANDROID);
         // this.configureToolbar();
         this.getCurrentUserFromFirestore();
+        this.getUserReceiver();
+
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -150,14 +159,15 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         // 1 - Check if text field is not empty and current user properly downloaded from Firestore
         if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
             // 2 - Create a new Message to Firestore
-            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), this.currentChatName, modelCurrentUser).addOnFailureListener(this.onFailureListener());
+            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), this.currentChatName, modelCurrentUser,modelUserReceiver).addOnFailureListener(this.onFailureListener());
             // 3 - Reset text field
             this.editTextMessage.setText("");
 
         }
+        this.userReceiverName.setText(modelUserReceiver.getUsername());
     }
 
-    @OnClick({ R.id.activity_friend_chat_android_chat_button, R.id.activity_friend_chat_firebase_chat_button, R.id.activity_friend_chat_bug_chat_button})
+   /* @OnClick({ R.id.activity_friend_chat_android_chat_button, R.id.activity_friend_chat_firebase_chat_button, R.id.activity_friend_chat_bug_chat_button})
     public void onClickChatButtons(ImageButton imageButton) {
         // 8 - Re-Configure the RecyclerView depending chosen chat
         switch (Integer.valueOf(imageButton.getTag().toString())){
@@ -171,7 +181,7 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
                 this.configureRecyclerView(CHAT_NAME_BUG);
                 break;
         }
-    }
+    }*/
 
     @OnClick(R.id.activity_friend_chat_add_file_button)
     public void onClickAddFile() { }
@@ -189,6 +199,17 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         });
     }
 
+    private void getUserReceiver(){
+
+
+        UserHelper.getUser(friendUID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                modelUserReceiver = documentSnapshot.toObject(User.class);
+            }
+        });
+    }
+
     // --------------------
     // UI
     // --------------------
@@ -197,7 +218,8 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         //Track current chat name
         this.currentChatName = chatName;
         //Configure Adapter & RecyclerView
-        this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
+       // this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
+        this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getMessageForChat(this.currentChatName,friendUID)), Glide.with(this), this, getCurrentUser().getUid());
         FriendChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {

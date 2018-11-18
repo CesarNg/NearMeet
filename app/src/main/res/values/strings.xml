@@ -87,7 +87,7 @@
 
     <!-- LOGIN ACTIVITY -->
     <string name="toolbar_title_login_activity">Votre Profil</string>
-    <string name="text_input_username">Nom d\'utilisateur</string>
+    <string name="text_input_username">Nom d\'utilisateur :</string>
     <string name="text_view_email">Adresse email :</string>
     <string name="text_view_champ_recherche">Champ de recherche :</string>
     <string name="button_update_account">Mettre à jour le profil</string>
