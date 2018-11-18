@@ -10,10 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -48,7 +45,6 @@ import org.imperiumlabs.geofirestore.GeoQueryEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -149,6 +145,7 @@ public class HomeFragment extends Fragment  implements
     }
 
     // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -274,14 +271,14 @@ public class HomeFragment extends Fragment  implements
     @Override
     public void onStop()
     {
-        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onStop();
     }
 
     @Override
     public void onDestroy()
     {
-        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onDestroy();
     }
 
@@ -290,6 +287,7 @@ public class HomeFragment extends Fragment  implements
     {
         visible=!visible;
         if (visible) {
+            UserHelper.updateIsVisible(true,this.getCurrentUser().getUid());
             GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(current_location.getLatitude(), current_location.getLongitude()), 0.6);
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
@@ -352,6 +350,9 @@ public class HomeFragment extends Fragment  implements
         }
         else {
             mMap.clear();
+
+            UserHelper.updateIsVisible(false,this.getCurrentUser().getUid());
+
         }
     }
     /**

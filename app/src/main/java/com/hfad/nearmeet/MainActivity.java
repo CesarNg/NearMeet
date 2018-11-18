@@ -2,18 +2,14 @@ package com.hfad.nearmeet;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import android.location.Location;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -75,12 +71,14 @@ public class MainActivity extends BaseActivity implements
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
+        UserHelper.updateIsOnline(true, getCurrentUser().getUid());
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        UserHelper.update_isOnline(true, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(true, getCurrentUser().getUid());
     }
 
     /**
@@ -184,15 +182,16 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onStop()
     {
-        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        UserHelper.update_isOnline(false, getCurrentUser().getUid());
+        UserHelper.updateIsOnline(false, getCurrentUser().getUid());
         super.onDestroy();
+
     }
 
     public void switchClick(android.view.View view)
