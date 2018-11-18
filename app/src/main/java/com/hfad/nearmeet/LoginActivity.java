@@ -43,6 +43,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mEmailField = findViewById(R.id.fieldEmail);
         mPasswordField = findViewById(R.id.fieldPassword);
         signUpFieldUsername = findViewById(R.id.SignUpFieldUsername);
+        signUpFieldPassword = findViewById(R.id.SignUpFieldPassword);
+        signUpFieldConfirmPassword = findViewById(R.id.SignUpFieldConfirmPassword);
         signUpFieldEmail = findViewById(R.id.SignUpFieldEmail);
 
         // Buttons
@@ -79,19 +81,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onStart() {
         super.onStart();
-        findViewById(R.id.emailSignUpForm).setVisibility(View.INVISIBLE);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             startProfileActivity();
         }
     }
 
-    private void createAccount(String email, String password) {
+    private void createAccount(String email, String password, final String username) {
         Log.d(TAG, "createAccount:" + email);
-        if (!validateSignInForm()) {
-            return;
-        }
-
+        if (validateSignUpForm()) {
         showProgressDialog();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -101,7 +99,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            createUserInFirestore();
+                            createUserInFirestore(username);
+                            user = mAuth.getCurrentUser();
+                            startProfileActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -111,6 +111,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         hideProgressDialog();
                     }
                 });
+        }
     }
 
     private void signIn(String email, String password) {
@@ -148,7 +149,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            mEmailField.setError(this.getString(R.string.field_required));
             valid = false;
         } else {
             mEmailField.setError(null);
@@ -156,32 +157,52 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+            mPasswordField.setError(this.getString(R.string.field_required));
             valid = false;
         } else {
             mPasswordField.setError(null);
         }
-
         return valid;
     }
 
     private boolean validateSignUpForm() {
         boolean valid = true;
-        String email = signUpFieldUsername.getText().toString();
-        String password = mPasswordField.getText().toString();
-        String confirmPassword = mPasswordField.getText().toString();
+        String email = signUpFieldEmail.getText().toString();
+        String password = signUpFieldPassword.getText().toString();
+        String confirmPassword = signUpFieldConfirmPassword.getText().toString();
+        String username = signUpFieldUsername.getText().toString();
+
+        // Email field
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            signUpFieldEmail.setError(this.getString(R.string.field_required));
             valid = false;
         } else {
-            mEmailField.setError(null);
+            signUpFieldEmail.setError(null);
+        }
+        // Password field
+        if (TextUtils.isEmpty(password)) {
+            signUpFieldPassword.setError(this.getString(R.string.field_required));
+            valid = false;
+        } else {
+            signUpFieldPassword.setError(null);
+        }
+        // Confirm password field
+        if (TextUtils.isEmpty(confirmPassword)) {
+            signUpFieldConfirmPassword.setError(this.getString(R.string.field_required));
+            valid = false;
+        } else if (!confirmPassword.equals(password)) {
+            signUpFieldConfirmPassword.setError(this.getString(R.string.password_confirm_invalid));
+            valid = false;
+        } else {
+            signUpFieldConfirmPassword.setError(null);
         }
 
-        if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+        // Username field
+        if (TextUtils.isEmpty(username)) {
+            signUpFieldUsername.setError(this.getString(R.string.field_required));
             valid = false;
         } else {
-            mPasswordField.setError(null);
+            signUpFieldUsername.setError(null);
         }
 
         return valid;
@@ -190,14 +211,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
-        if (viewId == R.id.emailCreateAccountButton) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (viewId == R.id.emailSignInButton) {
+        if (viewId == R.id.emailSignInButton) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (viewId == R.id.viewSignInForm){
             showSigninForm();
         }else if (viewId == R.id.signUpButton){
             showSignUpForm();
+        }else if(viewId == R.id.emailCreateAccountButton){
+            createAccount(  signUpFieldEmail.getText().toString(),
+                    signUpFieldPassword.getText().toString(),
+                    signUpFieldUsername.getText().toString());
         }
 
     }
@@ -218,18 +241,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         startActivity(intent);
     }
 
-    private void createUserInFirestore(){
-
+    private void createUserInFirestore(String username){
         if (this.getCurrentUser() != null){
-
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
-            String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
             GeoPoint localisation = null;
             String champRecherche = "100 M";
             Boolean isVisible = false;
 
             UserHelper.createUser(uid, username, urlPicture, localisation, champRecherche, isVisible).addOnFailureListener(this.onFailureListener());
+
         }
     }
     @Override
