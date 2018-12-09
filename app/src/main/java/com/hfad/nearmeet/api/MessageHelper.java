@@ -1,9 +1,6 @@
 package com.hfad.nearmeet.api;
 
-import android.hardware.usb.UsbRequest;
-
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 import com.hfad.nearmeet.Model.Message;
