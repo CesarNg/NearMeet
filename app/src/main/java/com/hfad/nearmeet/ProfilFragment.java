@@ -28,6 +28,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.hfad.nearmeet.Model.User;
@@ -209,17 +212,28 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
             textViewEmail.setText(email);
 
             // 7 - Get additional data from Firestore (champRecherche & Username)
-            UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            UserHelper.getUser(this.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User currentUser = documentSnapshot.toObject(User.class);
-                    String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
-                    textInputEditTextUsername.setText(username);
-                    champRecherche = currentUser.getChampRecherche();
-                    spinner.setAdapter(dataAdapter);
-                    selectSpinnerChampRecherche(champRecherche);
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+
+                        User currentUser = userSnapshot.getValue(User.class);
+                        String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
+                        textInputEditTextUsername.setText(username);
+                        champRecherche = currentUser.getChampRecherche();
+                        spinner.setAdapter(dataAdapter);
+                        selectSpinnerChampRecherche(champRecherche);
+
+                    }
 
 
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    System.out.println("The read failed: " + databaseError.getCode());
                 }
             });
 
@@ -237,11 +251,11 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
         if (this.getCurrentUser() != null) {
 
             // We also delete user from firestore storage
-            UserHelper.deleteUser(this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener());
+           /* UserHelper.deleteUser(this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener());
 
             AuthUI.getInstance()
                     .delete(getActivity())
-                    .addOnSuccessListener(getActivity(), this.updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));
+                    .addOnSuccessListener(getActivity(), this.updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));*/
         }
     }
 

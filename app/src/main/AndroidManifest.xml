@@ -28,12 +28,12 @@
         <activity
             android:name=".Splashscreen"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity
-            android:name=".ProfileActivity"
-            android:label="@string/toolbar_title_login_activity"
-            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".ListPeopleActivity"
             android:parentActivityName=".MainActivity" />
@@ -82,11 +82,7 @@
             android:label="@string/title_activity_user_list" />
         <activity android:name=".GameActivity" />
         <activity android:name=".StartActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

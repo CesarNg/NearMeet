@@ -23,6 +23,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
+import com.hfad.nearmeet.Model.Geopoint;
 import com.hfad.nearmeet.api.UserHelper;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -245,7 +246,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (this.getCurrentUser() != null){
             String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             String uid = this.getCurrentUser().getUid();
-            GeoPoint localisation = null;
+            Geopoint localisation = null;
             String champRecherche = "100 M";
             Boolean isVisible = false;
 

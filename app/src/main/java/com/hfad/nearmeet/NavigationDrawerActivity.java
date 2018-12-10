@@ -1,6 +1,7 @@
 package com.hfad.nearmeet;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.UserHelper;
@@ -170,14 +174,21 @@ public class NavigationDrawerActivity extends BaseActivity
             textViewEmail.setText(email);
 
             // 7 - Get additional data from Firestore ( Username)
-            UserHelper.getUser(this.getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User currentUser = documentSnapshot.toObject(User.class);
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User currentUser = dataSnapshot.getValue(User.class);
                     String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
                     textUsername.setText(username);
                 }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
             });
+
 
         }
     }

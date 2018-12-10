@@ -32,9 +32,10 @@ public class FriendChatAdapter extends FirestoreRecyclerAdapter<Message, Message
 
     @Override
     protected void onBindViewHolder(@NonNull MessageViewHolder holder, int position, @NonNull Message model) {
-        holder.updateWithMessage(model, this.idCurrentUser, this.glide);
+        holder.updateWithMessage(model, this.idCurrentUser);
     }
 
+    @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new MessageViewHolder(LayoutInflater.from(parent.getContext())

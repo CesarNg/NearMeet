@@ -1,10 +1,14 @@
 package com.hfad.nearmeet.api;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.Query;
 import com.hfad.nearmeet.Model.Message;
 import com.hfad.nearmeet.Model.User;
+
+import java.util.Date;
 
 public class MessageHelper {
 
@@ -12,36 +16,25 @@ public class MessageHelper {
 
     // --- GET ---
 
-    public static Query getAllMessageForChat(String chat){
-        return ChatHelper.getChatCollection()
-                .document(chat)
-                .collection(COLLECTION_NAME)
-                .orderBy("dateCreated")
-                .limit(50);
+    public static DatabaseReference getDatabaseRef(){
+        return FirebaseDatabase.getInstance().getReference(COLLECTION_NAME);
     }
 
-    /*public static Query getMessageForChat(String chat, String uidReceiver){
-
-
-        return ChatHelper.getChatCollection()
-                .document(chat)
-                .collection(COLLECTION_NAME)
-                .whereEqualTo("userSender.uid",uidReceiver)
-                .orderBy("dateCreated")
-                .limit(50);
-    }*/
+    public static Query getAllMessageForChat(){
+        return MessageHelper.getDatabaseRef().orderByChild("uid");
+    }
 
 
 
-    public static Task<DocumentReference> createMessageForChat(String textMessage, String chat, User userSender, User userReceiver){
+
+    public static Task<Void> createMessageForChat(String textMessage, String uidReceiver, String uidSender){
 
         // 1 - Create the Message object
-        Message message = new Message(textMessage, userSender, userReceiver);
 
-        // 2 - Store Message to Firestore
-        return ChatHelper.getChatCollection()
-                .document(chat)
-                .collection(COLLECTION_NAME)
-                .add(message);
+        String key = MessageHelper.getDatabaseRef().push().getKey();
+        Message message = new Message(textMessage, uidSender, uidReceiver,key,null);
+
+        return MessageHelper.getDatabaseRef().child(key).setValue(message);
+
     }
 }
