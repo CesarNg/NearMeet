@@ -15,8 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,6 +52,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     @BindView(R.id.profile_fragment_text_view_email) TextView textViewEmail;
     @BindView(R.id.profile_fragment_progress_bar) ProgressBar progressBar;
     @BindView(R.id.spinner)Spinner spinner;
+    @BindView(R.id.multispinner)MultiSpinner multiSpinner;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -70,6 +74,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     private String mParam1;
     private String mParam2;
     private String champRecherche;
+    private ArrayList<String> interets;
     private ArrayAdapter dataAdapter;
 
     private OnFragmentInteractionListener mListener;
@@ -104,14 +109,33 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        interets = new ArrayList<>();
+
         View view = inflater.inflate(R.layout.fragment_profil, container, false);
         ButterKnife.bind(this, view);
 
         spinner.setOnItemSelectedListener(this);
-
+        multiSpinner.setMultiSpinnerListener(new MultiSpinner.MultiSpinnerListener() {
+            @Override
+            public void onItemsSelected(boolean[] selected) {
+                for (int i=0; i<multiSpinner.getEntries().length;i++)
+                {
+                    if (selected[i] && !interets.contains(multiSpinner.getEntries()[i])) {
+                        interets.add(multiSpinner.getEntries()[i].toString());
+                    }
+                    else if(selected[i] && interets.contains(multiSpinner.getEntries()[i])) {}
+                    else
+                    {
+                        if (interets.contains(multiSpinner.getEntries()[i].toString()))
+                        {
+                            interets.remove(multiSpinner.getEntries()[i]);
+                        }
+                    }
+                }
+            }
+        });
         // Creating adapter for spinner
         dataAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.champ_recherche, android.R.layout.simple_spinner_item);
-
         this.updateUIWhenCreating();
 
         return view;
@@ -153,9 +177,11 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         champRecherche = parent.getItemAtPosition(position).toString();
 
-        Toast.makeText(parent.getContext(), "Selected: " + champRecherche, Toast.LENGTH_LONG).show();
+        //Toast.makeText(parent.getContext(), "Selected: " + champRecherche, Toast.LENGTH_LONG).show();
 
     }
+
+
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
@@ -189,7 +215,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
             }
 
             UserHelper.updateChampRecherche(champRecherche,this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_CHAMP_RECHERCHE));
-
+            UserHelper.updateInterets(interets,this.getCurrentUser().getUid());
         }
 
 

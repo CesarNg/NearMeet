@@ -8,6 +8,10 @@ import com.google.firebase.firestore.GeoPoint;
 
 import com.hfad.nearmeet.Model.User;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserHelper {
 
     private static final String COLLECTION_NAME = "users";
@@ -47,6 +51,10 @@ public class UserHelper {
     }
     public static Task<Void> updateChampRecherche (String champRecherche, String uid){
         return UserHelper.getUsersCollection().document(uid).update("champRecherche", champRecherche);
+    }
+    public static Task<Void> updateInterets (ArrayList<String> interets, String uid) {
+        //UserHelper.getUsersCollection().document(uid).update("interets", null);
+        return UserHelper.getUsersCollection().document(uid).update( "interets", interets.subList(0,interets.size()));
     }
     public static Task<Void> updateIsOnline(Boolean online, String uid){
         return UserHelper.getUsersCollection().document(uid).update("isOnline",online);

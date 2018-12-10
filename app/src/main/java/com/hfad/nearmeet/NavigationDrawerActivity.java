@@ -75,7 +75,6 @@ public class NavigationDrawerActivity extends BaseActivity
         textUsername = view.findViewById(R.id.username_text);
         textViewEmail = view.findViewById(R.id.email_text);
 
-
         this.showFirstFragment();
 
         this.updateUIWhenCreating();

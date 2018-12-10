@@ -289,7 +289,7 @@ public class HomeFragment extends Fragment  implements
         visible=!visible;
         if (visible) {
             UserHelper.updateIsVisible(true,this.getCurrentUser().getUid());
-            GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(current_location.getLatitude(), current_location.getLongitude()), 0.6);
+            GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(current_location.getLatitude(), current_location.getLongitude()), 0.5);
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String documentID, GeoPoint location) {
