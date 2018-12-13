@@ -47,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showListPeople"
-            android:text="@string/text_proximite" />
+            android:text="@string/text_proximite"
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

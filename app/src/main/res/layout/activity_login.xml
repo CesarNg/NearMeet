@@ -55,7 +55,6 @@
                 android:autofillHints="" />
             <Button
                 android:id="@+id/emailSignInButton"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_in"
@@ -64,11 +63,11 @@
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/facebookLoginButton"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.MyDarkButton" />
 
             <Button
                 android:id="@+id/signUpButton"
-                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/button_sign_up"
