@@ -13,34 +13,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:layout_margin="@dimen/default_large_margin">
-
-            <!-- NEARMEET IMAGE -->
-            <ImageView
-                android:layout_width="@dimen/profil_icon_width"
-                android:layout_height="@dimen/profil_icon_height"
-                android:contentDescription="@string/app_name"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:background="@drawable/logonearme"/>
-
-            <!-- PROGRESS BAR -->
-            <ProgressBar
-                android:id="@+id/profile_fragment_progress_bar"
-                android:layout_width="30dip"
-                android:layout_height="30dip"
-                android:visibility="invisible"
-                android:layout_margin="@dimen/default_large_margin"/>
-
+           android:layout_margin="@dimen/default_large_margin"
+            android:orientation="vertical">
             <!-- PROFILE IMAGE -->
             <ImageView
                 android:id="@+id/profile_fragment_imageview_profile"
-                android:contentDescription="@string/app_name"
                 android:layout_width="@dimen/profil_photo_width"
                 android:layout_height="@dimen/profil_photo_height"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_anon_user_48dp" />
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@mipmap/ic_profile_picture" />
 
         </LinearLayout>
 
@@ -130,40 +113,34 @@
         <!-- BUTTON UPDATE INFO -->
         <Button
             android:id="@+id/profile_fragment_button_update"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
-            android:background="#11357b"
             android:padding="@dimen/default_margin"
             android:text="@string/button_update_account"
-            android:textColor="#fff"
-            android:textSize="@dimen/default_text_size" />
+            android:textSize="@dimen/default_text_size"
+            android:theme="@style/ThemeOverlay.MyDarkButton"/>
 
         <!-- BUTTON SIGN OUT -->
         <Button
             android:id="@+id/profile_fragment_button_sign_out"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
-            android:background="#11357b"
             android:padding="@dimen/default_margin"
             android:text="@string/button_sign_out_account"
-            android:textColor="#fff"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
             android:textSize="@dimen/default_text_size" />
 
         <!-- BUTTON DELETE ACCOUNT -->
         <Button
             android:id="@+id/profile_fragment_button_delete"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
-            android:background="#11357b"
             android:padding="@dimen/default_margin"
             android:text="@string/button_delete_account"
-            android:textColor="#fff"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
             android:textSize="@dimen/default_text_size" />
 
     </LinearLayout>

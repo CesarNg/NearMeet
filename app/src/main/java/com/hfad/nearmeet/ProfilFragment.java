@@ -46,7 +46,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     @BindView(R.id.profile_fragment_imageview_profile) ImageView imageViewProfile;
     @BindView(R.id.profile_fragment_edit_text_username) TextInputEditText textInputEditTextUsername;
     @BindView(R.id.profile_fragment_text_view_email) TextView textViewEmail;
-    @BindView(R.id.profile_fragment_progress_bar) ProgressBar progressBar;
     @BindView(R.id.spinner)Spinner spinner;
 
 
@@ -178,10 +177,7 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
 
 
     private void updateInfoInFirebase(){
-
-        this.progressBar.setVisibility(View.VISIBLE);
         String username = this.textInputEditTextUsername.getText().toString();
-
         if (this.getCurrentUser() != null){
             if (!username.isEmpty() &&  !username.equals(getString(R.string.info_no_username_found))){
                 UserHelper.updateUsername(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
@@ -277,7 +273,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
                         break;
 
                     case UPDATE_USERNAME:
-                        progressBar.setVisibility(View.INVISIBLE);
                         break;
 
                     default:
