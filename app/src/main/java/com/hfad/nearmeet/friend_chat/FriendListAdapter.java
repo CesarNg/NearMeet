@@ -1,14 +1,18 @@
 package com.hfad.nearmeet.friend_chat;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.hfad.nearmeet.R;
+
 import java.util.List;
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
     private List<String> values;
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -17,6 +21,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         public TextView txtHeader;
         public TextView txtFooter;
         public View layout;
+
         public ViewHolder(View v) {
             super(v);
             layout = v;
@@ -24,22 +29,26 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             txtFooter = (TextView) v.findViewById(R.id.last_message);
         }
     }
+
     public void add(int position, String item) {
         values.add(position, item);
         notifyItemInserted(position);
     }
+
     public void remove(int position) {
         values.remove(position);
         notifyItemRemoved(position);
     }
+
     // Provide a suitable constructor (depends on the kind of dataset)
     public FriendListAdapter(List<String> myDataset) {
         values = myDataset;
     }
+
     // Create new views (invoked by the layout manager)
     @Override
     public FriendListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                                   int viewType) {
         // create a new view
         LayoutInflater inflater = LayoutInflater.from(
                 parent.getContext());
@@ -49,6 +58,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
@@ -62,11 +72,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 remove(position);
             }
         });
+
         holder.txtFooter.setText("Footer: " + name);
     }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return values.size();
     }
+
 }
+

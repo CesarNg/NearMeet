@@ -295,29 +295,32 @@ public class HomeFragment extends Fragment  implements
         visible=!visible;
         if (visible) {
             UserHelper.updateIsVisible(true,this.getCurrentUser().getUid());
-            GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(current_location.getLatitude(), current_location.getLongitude()), 0.5);
+            GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(current_location.getLatitude(), current_location.getLongitude()), 0.6);
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String documentID, GeoPoint location) {
                     final String docID = documentID;
                     final GeoPoint locat = location;
-                    UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                    UserHelper.getUser().addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
                             for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
 
-                                User currentUser = userSnapshot.getValue(User.class);
-                                if (!docID.equals(getCurrentUser().getUid()) && currentUser.getIsOnline().equals(true)) {
-                                    Marker marker = mMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(locat.getLatitude(), locat.getLongitude()))
-                                            .title(docID)
-                                    );
-                                    markers.add(marker);
-                                    if (!idPeopleNear.contains(docID)) idPeopleNear.add(docID);
-                                    System.out.println(String.format("Document %s, %s entered the search area at [%f,%f]", docID, getCurrentUser().getUid(), locat.getLatitude(), locat.getLongitude()));
+                                if(userSnapshot.getKey().equals(getCurrentUser().getUid())){
+                                    User currentUser = userSnapshot.getValue(User.class);
+                                    if (!docID.equals(getCurrentUser().getUid()) && currentUser.getIsOnline().equals(true)) {
+                                        Marker marker = mMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(locat.getLatitude(), locat.getLongitude()))
+                                                .title(docID)
+                                        );
+                                        markers.add(marker);
+                                        if (!idPeopleNear.contains(docID)) idPeopleNear.add(docID);
+                                        System.out.println(String.format("Document %s, %s entered the search area at [%f,%f]", docID, getCurrentUser().getUid(), locat.getLatitude(), locat.getLongitude()));
+                                    }
                                 }
+
 
                             }
 

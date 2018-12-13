@@ -78,7 +78,7 @@ public class ListPeopleActivity extends AppCompatActivity  {
         final ListView listview = findViewById(R.id.listview);
 
         final ArrayAdapter adapter = new ArrayAdapter(this, R.layout.simple_list_item,
-                R.id.firstLine, idPeopleNear);
+                R.id.firstLine, peoplesName);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

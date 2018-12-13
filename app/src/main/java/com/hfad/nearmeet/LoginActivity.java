@@ -138,7 +138,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     Toast.LENGTH_SHORT).show();
                         }
                         if (!task.isSuccessful()) {
-                            mStatusTextView.setText(R.string.auth_failed);
+                          //  mStatusTextView.setText(R.string.auth_failed);
                         }
                         hideProgressDialog();
                     }

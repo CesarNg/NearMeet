@@ -12,9 +12,7 @@ import com.hfad.nearmeet.Model.Geopoint;
 import com.hfad.nearmeet.Model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UserHelper {
@@ -45,7 +43,6 @@ public class UserHelper {
 
 
         //  Create User object
-        //List<String> interets = Arrays.asList();;
         User userToCreate = new User(uid, username, urlPicture, localisation, champRecherche, isVisible);
         return UserHelper.getDatabaseRef()
                 .child(uid)
@@ -91,9 +88,6 @@ public class UserHelper {
     public static Task<Void> updateChampRecherche (String champRecherche, String uid){
         return UserHelper.getDatabaseRef().child(uid).child("champRecherche").setValue(champRecherche);
     }
-    public static Task<Void> updateInterets (ArrayList<String> interests, String uid){
-        return UserHelper.getDatabaseRef().child(uid).child("interets").setValue(interests.subList(0,interests.size()));
-    }
     public static Task<Void> updateIsOnline (Boolean isOnline, String uid){
         return UserHelper.getDatabaseRef().child(uid).child("isOnline").setValue(isOnline);
     }
@@ -101,12 +95,15 @@ public class UserHelper {
     public static Task<Void> updateIsVisible (Boolean isVisibe, String uid){
         return UserHelper.getDatabaseRef().child(uid).child("isVisible").setValue(isVisibe);
     }
+    public static Task<Void> updateInterets (ArrayList<String> interets, String uid){
+        return UserHelper.getDatabaseRef().child(uid).child("interets").setValue(interets.subList(0,interets.size()));
+    }
 
 
     // Query
 
-    public static Query getUser(String uid){
-        return UserHelper.getDatabaseRef().child(uid);
+    public static Query getUser(){
+        return UserHelper.getDatabaseRef();
     }
 
 
