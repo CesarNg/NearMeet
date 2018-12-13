@@ -91,6 +91,7 @@
     <string name="text_input_username">Nom d\'utilisateur :</string>
     <string name="text_view_email">Adresse email :</string>
     <string name="text_view_champ_recherche">Champ de recherche :</string>
+    <string name="text_view_interet">Intérêts :</string>
     <string name="password_confirm_invalid">Les mots de passes ne correspondent pas</string>
     <string name="field_required">Ce champs est requis</string>
     <string name="button_update_account">Mettre à jour le profil</string>

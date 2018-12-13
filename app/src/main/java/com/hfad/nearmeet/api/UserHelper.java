@@ -11,6 +11,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.hfad.nearmeet.Model.Geopoint;
 import com.hfad.nearmeet.Model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +94,9 @@ public class UserHelper {
 
     public static Task<Void> updateIsVisible (Boolean isVisibe, String uid){
         return UserHelper.getDatabaseRef().child(uid).child("isVisible").setValue(isVisibe);
+    }
+    public static Task<Void> updateInterets (ArrayList<String> interets, String uid){
+        return UserHelper.getDatabaseRef().child(uid).child("interets").setValue(interets.subList(0,interets.size()));
     }
 
 
