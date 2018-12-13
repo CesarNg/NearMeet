@@ -126,7 +126,6 @@ public class MainActivity extends BaseActivity implements
 
 
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
 
@@ -143,12 +142,6 @@ public class MainActivity extends BaseActivity implements
         }
 
         return false;
-    }
-
-
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -280,4 +273,8 @@ public class MainActivity extends BaseActivity implements
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+
+    }
 }

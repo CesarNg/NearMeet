@@ -78,7 +78,7 @@ public class ListPeopleActivity extends AppCompatActivity  {
         final ListView listview = findViewById(R.id.listview);
 
         final ArrayAdapter adapter = new ArrayAdapter(this, R.layout.simple_list_item,
-                R.id.firstLine, peoplesName);
+                R.id.firstLine, idPeopleNear);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,9 +97,7 @@ public class ListPeopleActivity extends AppCompatActivity  {
                 // set dialog message
                 alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //Intent I = new Intent(this,MainActivity.class);
-                        //I.putExtra("opponent",guy);
-                        //startActivity(I);
+                        StartGame();
                     }
                 });
                 alertDialogBuilder.setCancelable(true).setNegativeButton("Return", new DialogInterface.OnClickListener() {
@@ -116,8 +114,14 @@ public class ListPeopleActivity extends AppCompatActivity  {
 
             }
         });
+
     }
 
+    public void StartGame() {
+        Intent I = new Intent(this,StartActivity.class);
+        //I.putExtra("opponent",guy);
+        startActivity(I);
+    }
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
         private final String[] values;
