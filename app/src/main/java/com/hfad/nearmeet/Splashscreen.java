@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public class Splashscreen extends AppCompatActivity {
 
-    private static int TIME_OUT = 2000;
+    private static int TIME_OUT = 600;
 
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);

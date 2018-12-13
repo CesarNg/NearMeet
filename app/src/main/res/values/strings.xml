@@ -27,34 +27,34 @@
     <string name="label_firebase_ui">FirebaseUI Auth</string>
     <string name="desc_firebase_ui">Use the FirebaseUI-Android library to authenticate with Firebase.</string>
 
-    <string name="hint_user_id">User ID</string>
-    <string name="get_custom_token">Get Token</string>
-    <string name="sign_in">Sign In</string>
-    <string name="create_account">Create Account</string>
-    <string name="send_link">Send Link</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="verify_email">Verify Email</string>
-    <string name="disconnect">Disconnect</string>
-    <string name="loading">Loading…</string>
-    <string name="custom_token">Custom Token</string>
-    <string name="signed_in">Signed In</string>
-    <string name="signed_out">Signed Out</string>
+    <string name="hint_user_id">ID Utilisateur</string>
+    <string name="get_custom_token">Obtenir un token</string>
+    <string name="sign_in">Se connecter</string>
+    <string name="create_account">Créer un compte</string>
+    <string name="send_link">Envoyer le lien</string>
+    <string name="sign_out">Se déconnecter</string>
+    <string name="verify_email">Vérifier l\'email</string>
+    <string name="disconnect">Se déconnecter</string>
+    <string name="loading">Chargement...</string>
+    <string name="custom_token">Token personnalisé</string>
+    <string name="signed_in">Connecté</string>
+    <string name="signed_out">Déconnecté</string>
     <string name="token_null">Token: null</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Mot de passe</string>
     <string name="hint_confirm_password">Confirmer le mot de passe</string>
-    <string name="desc_firebase_lockup">Firebase logo and name</string>
-    <string name="auth_failed">Authentication failed</string>
-    <string name="start_phone_auth">Start</string>
-    <string name="verify_phone_auth">Verify</string>
-    <string name="resend_phone_auth">Resend</string>
-    <string name="hint_phone_number">Phone Number</string>
-    <string name="hint_verification_code">Verification Code</string>
-    <string name="status_code_sent">Code Sent</string>
-    <string name="status_verification_failed">Verification failed</string>
-    <string name="status_verification_succeeded">Verification succeeded</string>
-    <string name="status_sign_in_failed">Sign-in failed</string>
-    <string name="instant_validation">(instant validation)</string>
+    <string name="desc_firebase_lockup">Firebase logo et nom</string>
+    <string name="auth_failed">Erreur d\'authentification</string>
+    <string name="start_phone_auth">Démarrer</string>
+    <string name="verify_phone_auth">Vérifier</string>
+    <string name="resend_phone_auth">Renvoyer</string>
+    <string name="hint_phone_number">Numéro de téléphone</string>
+    <string name="hint_verification_code">Code de vérification</string>
+    <string name="status_code_sent">Code envoyé</string>
+    <string name="status_verification_failed">Erreur de vérification</string>
+    <string name="status_verification_succeeded">Vérification réussie</string>
+    <string name="status_sign_in_failed">La connection à échoué</string>
+    <string name="instant_validation">(validation instantanée)</string>
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="firebase_user_management">Firebase User Management</string>
@@ -70,11 +70,11 @@
 
     <string name="passwordless_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="passwordless_title_text">Passwordless Sign In</string>
-    <string name="status_email_not_sent">Send link to your email to get started.</string>
-    <string name="status_email_sent">Link sent, check your email to continue.</string>
-    <string name="status_link_found">Link received, enter email to sign in.</string>
+    <string name="status_email_not_sent">Envoyer l\'email pour commencer</string>
+    <string name="status_email_sent">Lien envoyé, vérifier votre email pour pouvoir continuer.</string>
+    <string name="status_link_found">Lien reçu, entrer l\'email pour vous connecter.</string>
 
-    <string name="phone_title_text">Phone Number</string>
+    <string name="phone_title_text">Numéro de téléphone</string>
 
     <string name="twitter_status_fmt">Twitter User: %s</string>
     <string name="twitter_title_text">Twitter Login</string>
@@ -96,10 +96,10 @@
     <string name="button_update_account">Mettre à jour le profil</string>
     <string name="button_delete_account">Supprimer mon compte</string>
     <string name="button_sign_out_account">Déconnexion</string>
-    <string name="info_no_email_found">Auncune adresse email</string>
+    <string name="info_no_email_found">Aucune adresse email</string>
     <string name="info_no_username_found">Aucun nom d\'utilisateur</string>
-    <string name="popup_message_confirmation_delete_account">Es-tu sûr(e) de vouloir supprimer ton compte ?</string>
-    <string name="popup_message_choice_yes">Oui !</string>
+    <string name="popup_message_confirmation_delete_account">Etes vous sûr(e) de vouloir supprimer votre compte ?</string>
+    <string name="popup_message_choice_yes">Oui</string>
     <string name="popup_message_choice_no">Non</string>
     <string name="button_facebook_login">Se connecter avec Facebook</string>
     <string name="button_sign_up">Créer un compte</string>
@@ -134,17 +134,17 @@
 
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_home">Home</string>
+    <string name="nav_home">Accueil</string>
     <string name="nav_profil">Profil</string>
-    <string name="nav_settings">Settings</string>
+    <string name="nav_settings">Paramètres</string>
     <string name="nav_chat">Chat</string>
-    <string name="nav_about_us">About Us</string>
+    <string name="nav_about_us">A propos de nous</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>Home</item>
+        <item>Accueil</item>
         <item>Profil</item>
-        <item>Settings</item>
+        <item>Paramètres</item>
     </string-array>
 
     <!-- FRIEND_CHAT ACTIVITY -->
