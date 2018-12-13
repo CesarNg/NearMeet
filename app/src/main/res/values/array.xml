@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="interets">
+        <item>Natation</item>
+        <item>Soccer</item>
+        <item>Athlétisme</item>
+        <item>Lecture fantastique</item>
+        <item>Lecture policier</item>
+        <item>Jeux vidéos</item>
+        <item>Cinéma</item>
+        <item>Marche et randonnée</item>
+        <item>Musique éléctronique</item>
+        <item>Musique classique</item>
+        <item>Rap</item>
+        <item>Soul</item>
+    </string-array>
+</resources>

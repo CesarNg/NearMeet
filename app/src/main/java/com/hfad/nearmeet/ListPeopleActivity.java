@@ -54,6 +54,8 @@ public class ListPeopleActivity extends AppCompatActivity  {
         String[] peoplesID = new String[idPeopleNear.size()];
         final ArrayList<String> peoplesName = new ArrayList<>(idPeopleNear.size());
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         for (int i=0; i<idPeopleNear.size(); i++)
         {
             peoplesID[i] = idPeopleNear.get(i);
@@ -65,7 +67,6 @@ public class ListPeopleActivity extends AppCompatActivity  {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.e("YOYOYO", document.getString("username"));
                                     peoplesName.add(document.getString("username"));
                                 }
                             }
@@ -77,7 +78,7 @@ public class ListPeopleActivity extends AppCompatActivity  {
         final ListView listview = findViewById(R.id.listview);
 
         final ArrayAdapter adapter = new ArrayAdapter(this, R.layout.simple_list_item,
-                R.id.firstLine, idPeopleNear);
+                R.id.firstLine, peoplesName);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
