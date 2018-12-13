@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
         android:contentDescription="TODO"
-        app:srcCompat="@drawable/ic_anon_user_48dp" />
+        app:srcCompat="@mipmap/ic_profile_picture" />
 
     <TextView
         android:id="@+id/last_message"
