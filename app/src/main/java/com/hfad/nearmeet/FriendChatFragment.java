@@ -86,8 +86,8 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String chatUID;
+    private String uidReceiver;
 
     private OnFragmentInteractionListener mListener;
 
@@ -121,8 +121,8 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            chatUID = getArguments().getString(ARG_PARAM1);
+            uidReceiver = getArguments().getString(ARG_PARAM2);
         }
 
 
@@ -177,7 +177,7 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
         // 1 - Check if text field is not empty and current user properly downloaded from Firestore
         if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
             // 2 - Create a new Message to Firestore
-            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser.getUid(),modelUserReceiver.getUid()).addOnFailureListener(this.onFailureListener());
+            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser.getUid(),uidReceiver,chatUID).addOnFailureListener(this.onFailureListener());
             // 3 - Reset text field
             this.editTextMessage.setText("");
 
@@ -186,22 +186,6 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
         this.updateUIWhenCreating();
 
     }
-
-   /* @OnClick({ R.id.activity_friend_chat_android_chat_button, R.id.activity_friend_chat_firebase_chat_button, R.id.activity_friend_chat_bug_chat_button})
-    public void onClickChatButtons(ImageButton imageButton) {
-        // 8 - Re-Configure the RecyclerView depending chosen chat
-        switch (Integer.valueOf(imageButton.getTag().toString())){
-            case 10:
-                this.configureRecyclerView(CHAT_NAME_ANDROID);
-                break;
-            case 20:
-                this.configureRecyclerView(CHAT_NAME_FIREBASE);
-                break;
-            case 30:
-                this.configureRecyclerView(CHAT_NAME_BUG);
-                break;
-        }
-    }*/
 
     @OnClick(R.id.fragment_friend_chat_add_file_button)
     public void onClickAddFile() { }

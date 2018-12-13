@@ -47,6 +47,8 @@ public class User {
     }
     public Boolean getIsVisible(){return isVisible;}
     public Boolean getIsOnline(){return isOnline;}
+
+
     public  ArrayList<String> getInterets(){return interets;}
 
     // --- SETTERS ---

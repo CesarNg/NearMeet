@@ -27,14 +27,14 @@ public class MessageHelper {
 
 
 
-    public static Task<Void> createMessageForChat(String textMessage, String uidReceiver, String uidSender){
+    public static Task<Void> createMessageForChat(String textMessage, String uidReceiver, String uidSender, String chatUID){
 
         // 1 - Create the Message object
 
         String key = MessageHelper.getDatabaseRef().push().getKey();
         Message message = new Message(textMessage, uidSender, uidReceiver,key,null);
 
-        return MessageHelper.getDatabaseRef().child(key).setValue(message);
+        return MessageHelper.getDatabaseRef().child(chatUID).child(key).setValue(message);
 
     }
 }
