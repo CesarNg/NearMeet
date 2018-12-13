@@ -33,7 +33,7 @@
     <string name="create_account">Créer un compte</string>
     <string name="send_link">Envoyer le lien</string>
     <string name="sign_out">Se déconnecter</string>
-    <string name="verify_email">Vérifier l'email</string>
+    <string name="verify_email">Vérifier l\'email</string>
     <string name="disconnect">Se déconnecter</string>
     <string name="loading">Chargement...</string>
     <string name="custom_token">Token personnalisé</string>
