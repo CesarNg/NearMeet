@@ -10,7 +10,7 @@
         android:scaleType="centerCrop"
         android:clickable="false"
         android:id="@+id/background"
-        android:src="@drawable/chalk" />
+        android:src="@drawable/chalkboard" />
 
 
     <TextView
@@ -28,7 +28,7 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:text="RESTART"
+        android:text="Recommencer"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="32dp"
         style="@style/Widget.AppCompat.Button.Borderless"

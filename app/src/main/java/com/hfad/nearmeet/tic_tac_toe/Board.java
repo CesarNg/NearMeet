@@ -357,13 +357,13 @@ public class Board extends FrameLayout {
 
                     if (victory.winner == ME) {
                         text.setTextColor(Color.parseColor("#4CAF50"));
-                        text.setText("YOU WIN!");
+                        text.setText("Gagné !");
                     } else if (victory.winner == ENEMY) {
                         text.setTextColor(Color.parseColor("#FF5722"));
-                        text.setText("YOU LOOSE!");
+                        text.setText("Perdu !");
                     } else if (victory.winner == DRAFT) {
                         text.setTextColor(Color.parseColor("#9E9E9E"));
-                        text.setText("DRAFT");
+                        text.setText("Match nul");
                     }
 
                     text.animate().scaleY(1f).scaleX(1f).setListener(new AnimatorListenerAdapter() {
@@ -395,7 +395,7 @@ public class Board extends FrameLayout {
         }
         done = false;
         ai = new AI(MY_SHAPE, AI_SHAPE, field);
-        background.setImageResource(R.drawable.chalk);
+        background.setImageResource(R.drawable.chalkboard);
         background.setBackground(null);
         invalidate();
     }
@@ -461,11 +461,11 @@ public class Board extends FrameLayout {
     public void setMe(String me) {
         if (me.equals("x")) {
             isMyTurn = true;
-            Toast.makeText(getContext(), "Your turn", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "A votre tour", Toast.LENGTH_SHORT);
             MY_SHAPE = Constants.X;
         } else {
             isMyTurn = false;
-            Toast.makeText(getContext(), "Opponent's turn", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "A l'adversaire", Toast.LENGTH_SHORT);
             MY_SHAPE = Constants.CIRCLE;
             isMyTurn = false;
         }
