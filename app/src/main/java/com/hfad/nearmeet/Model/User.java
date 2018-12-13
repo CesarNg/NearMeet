@@ -2,22 +2,29 @@ package com.hfad.nearmeet.Model;
 
 import android.support.annotation.Nullable;
 
-import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.database.Exclude;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class User {
 
     private String uid;
     private String username;
-    private GeoPoint localisation;
+    private Geopoint localisation;
     private Boolean isVisible;
     private Boolean isOnline;
     private String champRecherche;
+    private ArrayList<String> interets;
     @Nullable
     private String urlPicture;
 
     public User() { }
 
-    public User(String uid, String username, @Nullable String urlPicture, GeoPoint localisation, String champRecherche, Boolean isVisible) {
+    public User(String uid, String username, @Nullable String urlPicture, Geopoint localisation, String champRecherche, Boolean isVisible) {
         this.uid = uid;
         this.username = username;
         this.urlPicture = urlPicture;
@@ -35,11 +42,12 @@ public class User {
         return champRecherche;
     }
     @Nullable public String  getUrlPicture() { return urlPicture; }
-    public GeoPoint getLocalisation() {
+    public Geopoint getLocalisation() {
         return localisation;
     }
     public Boolean getIsVisible(){return isVisible;}
     public Boolean getIsOnline(){return isOnline;}
+    public  ArrayList<String> getInterets(){return interets;}
 
     // --- SETTERS ---
     public void setUsername(String username) { this.username = username; }
@@ -49,8 +57,26 @@ public class User {
     public void setChampRecherche(String champRecherche) {
         this.champRecherche = champRecherche;
     }
-    public void setLocalisation(GeoPoint localisation) {
+    public void setLocalisation(Geopoint localisation) {
         this.localisation = localisation;
     }
-    public void setIsOnlinee(Boolean isOnline) { this.isOnline = isOnline; }
+    public void setIsOnline(Boolean isOnline) { this.isOnline = isOnline; }
+    public void setInterets( ArrayList<String> interets) {this.interets = interets;}
+
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid", uid);
+        result.put("username", username);
+        result.put("urlPicture", urlPicture);
+        result.put("localisation", localisation);
+        result.put("champRecherche", champRecherche);
+        result.put("isVisible", isVisible);
+        result.put("isOnline",isOnline);
+        result.put("interets", interets);
+
+        return result;
+    }
+
 }

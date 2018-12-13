@@ -1,6 +1,8 @@
 package com.hfad.nearmeet.api;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -10,7 +12,8 @@ public class ChatHelper {
 
     // --- COLLECTION REFERENCE ---
 
-    public static CollectionReference getChatCollection(){
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
+
+    public static DatabaseReference getDatabaseRef(){
+        return FirebaseDatabase.getInstance().getReference(COLLECTION_NAME);
     }
 }

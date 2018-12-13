@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,13 +24,24 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
+
 import com.hfad.nearmeet.Model.Message;
 import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.MessageHelper;
 import com.hfad.nearmeet.api.UserHelper;
+import com.hfad.nearmeet.friend_chat.ChatAdapter;
 import com.hfad.nearmeet.friend_chat.FriendChatAdapter;
+import com.hfad.nearmeet.friend_chat.FriendListAdapter;
+import com.squareup.okhttp.Callback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +56,7 @@ import butterknife.OnClick;
  * Use the {@link FriendChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendChatFragment extends Fragment implements FriendChatAdapter.Listener {
+public class FriendChatFragment extends Fragment implements ChatAdapter.Listener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,13 +75,15 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     TextView userReceiverName;
 
 
-    private com.hfad.nearmeet.friend_chat.FriendChatAdapter FriendChatAdapter;
+    private ChatAdapter chatAdapter;
+    private Context context;
 
     @Nullable
     private User modelCurrentUser;
     private User modelUserReceiver;
     private String currentChatName;
     private String friendUID;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -81,8 +93,7 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
 
     // STATIC DATA FOR CHAT (3)
     private static final String CHAT_NAME_ANDROID = "android";
-    private static final String CHAT_NAME_BUG = "bug";
-    private static final String CHAT_NAME_FIREBASE = "firebase";
+
 
     public FriendChatFragment() {
         // Required empty public constructor
@@ -125,8 +136,9 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         View view = inflater.inflate(R.layout.fragment_friend_chat, container, false);
         ButterKnife.bind(this,view);
         friendUID = "UeXWHEY1rydaxNXC2VS1wL1IxDC3";
+        this.textViewRecyclerViewEmpty.setVisibility(View.GONE);
         this.configureRecyclerView(CHAT_NAME_ANDROID);
-        // this.configureToolbar();
+
         this.getCurrentUserFromFirestore();
         this.getUserReceiver();
 
@@ -165,7 +177,7 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
         // 1 - Check if text field is not empty and current user properly downloaded from Firestore
         if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
             // 2 - Create a new Message to Firestore
-            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), this.currentChatName, modelCurrentUser,modelUserReceiver).addOnFailureListener(this.onFailureListener());
+            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser.getUid(),modelUserReceiver.getUid()).addOnFailureListener(this.onFailureListener());
             // 3 - Reset text field
             this.editTextMessage.setText("");
 
@@ -199,10 +211,16 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     // --------------------
     // 4 - Get Current User from Firestore
     private void getCurrentUserFromFirestore(){
-        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                modelCurrentUser = documentSnapshot.toObject(User.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                modelCurrentUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
     }
@@ -210,10 +228,16 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     private void getUserReceiver(){
 
 
-        UserHelper.getUser(friendUID).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                modelUserReceiver = documentSnapshot.toObject(User.class);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                modelUserReceiver = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
     }
@@ -222,35 +246,36 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
     // UI
     // --------------------
     // 5 - Configure RecyclerView with a Query
-    private void configureRecyclerView(String chatName){
+    /*private void configureRecyclerView(String chatName){
         //Track current chat name
         this.currentChatName = chatName;
         //Configure Adapter & RecyclerView
-        this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
+        /*this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
        // this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getMessageForChat(this.currentChatName,friendUID)), Glide.with(this), this, getCurrentUser().getUid());
         FriendChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 recyclerView.smoothScrollToPosition(FriendChatAdapter.getItemCount()); // Scroll to bottom on new messages
             }
-        });
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(this.FriendChatAdapter);
+        });*/
 
 
-    }
+
+
+
+   // }
 
     // 6 - Create options for RecyclerView from a Query
-    private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query){
+   /* private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query){
         return new FirestoreRecyclerOptions.Builder<Message>()
                 .setQuery(query, Message.class)
                 .setLifecycleOwner(this)
                 .build();
-    }
+    }*/
 
     @Override
     public void onDataChanged() {
-        textViewRecyclerViewEmpty.setVisibility(this.FriendChatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+        textViewRecyclerViewEmpty.setVisibility(chatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     private void updateUIWhenCreating(){
@@ -266,7 +291,7 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
             }
 
 
-            this.userReceiverName.setText(modelUserReceiver.getUsername());
+//            this.userReceiverName.setText(modelUserReceiver.getUsername());
 
         }
     }
@@ -301,4 +326,37 @@ public class FriendChatFragment extends Fragment implements FriendChatAdapter.Li
 
     @Nullable
     protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
+
+    private void configureRecyclerView(String chatName){
+        //Track current chat name
+        this.currentChatName = chatName;
+         List<Message> simpleViewModelList = new ArrayList<>();
+
+       MessageHelper.getAllMessageForChat().addValueEventListener(new ValueEventListener() {
+
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+               for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+
+                   Message message = messageSnapshot.getValue(Message.class);
+                   simpleViewModelList.add(message);
+               }
+
+               chatAdapter = new ChatAdapter(simpleViewModelList, getCurrentUser().getUid());
+               recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+               recyclerView.setHasFixedSize(true);
+               recyclerView.setAdapter(chatAdapter);
+
+
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+
+    }
 }

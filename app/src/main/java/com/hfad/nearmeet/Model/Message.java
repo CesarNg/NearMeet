@@ -8,42 +8,52 @@ public class Message {
 
     private String message;
     private Date dateCreated;
-    private User userSender;
-    private String urlImage;
-    private User userReceiver;
+    private String uidSender;
+    private String uidReceiver;
+    private String uid;
 
     public Message() { }
 
-    public Message(String message, User userSender, User userReceiver) {
+    public Message(String message, String uidSender, String uidReceiver, String uid, Date dateCreated) {
         this.message = message;
-        this.userSender = userSender;
-        this.userReceiver = userReceiver;
+        this.uidSender = uidSender;
+        this.uidReceiver = uidReceiver;
+        this.uid = uid;
+        this.dateCreated = dateCreated;
     }
 
-    public Message(String message, String urlImage, User userSender) {
-        this.message = message;
-        this.urlImage = urlImage;
-        this.userSender = userSender;
-    }
 
     // --- GETTERS ---
     public String getMessage() { return message; }
     @ServerTimestamp
     public Date getDateCreated() { return dateCreated; }
-    public User getUserSender() { return userSender; }
-    public String getUrlImage() { return urlImage; }
 
-    public User getUserReceiver() {
-        return userReceiver;
+    public String getUidReceiver() {
+        return uidReceiver;
+    }
+
+    public String getUidSender() {
+        return uidSender;
+    }
+
+    public String getUid() {
+        return uid;
     }
 
     // --- SETTERS ---
     public void setMessage(String message) { this.message = message; }
     public void setDateCreated(Date dateCreated) { this.dateCreated = dateCreated; }
-    public void setUserSender(User userSender) { this.userSender = userSender; }
-    public void setUrlImage(String urlImage) { this.urlImage = urlImage; }
 
-    public void setUserReceiver(User userReceiver) {
-        this.userReceiver = userReceiver;
+    public void setUidReceiver(String uidReceiver) {
+        this.uidReceiver = uidReceiver;
     }
+
+    public void setUidSender(String uidSender) {
+        this.uidSender = uidSender;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }

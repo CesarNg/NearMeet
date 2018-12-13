@@ -31,11 +31,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hfad.nearmeet.Model.Message;
+import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.UserHelper;
 
 import org.imperiumlabs.geofirestore.GeoFirestore;
@@ -82,7 +88,7 @@ public class HomeFragment extends Fragment  implements
      * Request code for location permission request.
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     /**
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
@@ -295,8 +301,35 @@ public class HomeFragment extends Fragment  implements
                 public void onKeyEntered(String documentID, GeoPoint location) {
                     final String docID = documentID;
                     final GeoPoint locat = location;
-                    db.collection("users")
-                            .whereEqualTo("uid", documentID)
+                    UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                            for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+
+                                User currentUser = userSnapshot.getValue(User.class);
+                                if (!docID.equals(getCurrentUser().getUid()) && currentUser.getIsOnline().equals(true)) {
+                                    Marker marker = mMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(locat.getLatitude(), locat.getLongitude()))
+                                            .title(docID)
+                                    );
+                                    markers.add(marker);
+                                    if (!idPeopleNear.contains(docID)) idPeopleNear.add(docID);
+                                    System.out.println(String.format("Document %s, %s entered the search area at [%f,%f]", docID, getCurrentUser().getUid(), locat.getLatitude(), locat.getLongitude()));
+                                }
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+                            /*.whereEqualTo("uid", documentID)
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -318,7 +351,7 @@ public class HomeFragment extends Fragment  implements
                                         Log.d("MainActivity", "Error getting documents: ", task.getException());
                                     }
                                 }
-                            });
+                            });*/
 
                 }
 

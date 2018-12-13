@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
 import com.hfad.nearmeet.Model.Message;
 import com.hfad.nearmeet.R;
 
@@ -63,10 +62,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         colorRemoteUser = ContextCompat.getColor(itemView.getContext(), R.color.colorPrimary);
     }
 
-    public void updateWithMessage(Message message, String currentUserId, RequestManager glide){
+    public void updateWithMessage(Message message, String currentUserId){
 
         // Check if current user is the sender
-        Boolean isCurrentUser = message.getUserSender().getUid().equals(currentUserId);
+        Boolean isCurrentUser = message.getUidSender().equals(currentUserId);
 
         // Update message TextView
         this.textViewMessage.setText(message.getMessage());
@@ -85,13 +84,13 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                     .into(imageViewProfile);*/
 
         // Update image sent ImageView
-        if (message.getUrlImage() != null){
+       /* if (message.getUrlImage() != null){
             glide.load(message.getUrlImage())
                     .into(imageViewSent);
             this.imageViewSent.setVisibility(View.VISIBLE);
         } else {
             this.imageViewSent.setVisibility(View.GONE);
-        }
+        }*/
 
         //Update Message Bubble Color Background
         ((GradientDrawable) textMessageContainer.getBackground()).setColor(isCurrentUser ? colorCurrentUser : colorRemoteUser);
