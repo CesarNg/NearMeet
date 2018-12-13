@@ -50,7 +50,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     @BindView(R.id.profile_fragment_imageview_profile) ImageView imageViewProfile;
     @BindView(R.id.profile_fragment_edit_text_username) TextInputEditText textInputEditTextUsername;
     @BindView(R.id.profile_fragment_text_view_email) TextView textViewEmail;
-    @BindView(R.id.profile_fragment_progress_bar) ProgressBar progressBar;
     @BindView(R.id.spinner)Spinner spinner;
     @BindView(R.id.multispinner)MultiSpinner multiSpinner;
 
@@ -176,9 +175,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         champRecherche = parent.getItemAtPosition(position).toString();
-
-        //Toast.makeText(parent.getContext(), "Selected: " + champRecherche, Toast.LENGTH_LONG).show();
-
     }
 
 
@@ -205,8 +201,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
 
 
     private void updateInfoInFirebase(){
-
-        this.progressBar.setVisibility(View.VISIBLE);
         String username = this.textInputEditTextUsername.getText().toString();
 
         if (this.getCurrentUser() != null){
@@ -302,11 +296,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
                     case DELETE_USER_TASK:
                         getActivity().finish();
                         break;
-
-                    case UPDATE_USERNAME:
-                        progressBar.setVisibility(View.INVISIBLE);
-                        break;
-
                     default:
                         break;
                 }
