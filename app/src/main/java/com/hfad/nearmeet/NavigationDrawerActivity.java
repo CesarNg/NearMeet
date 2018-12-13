@@ -174,12 +174,20 @@ public class NavigationDrawerActivity extends BaseActivity
             textViewEmail.setText(email);
 
             // 7 - Get additional data from Firestore ( Username)
-            UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            UserHelper.getUser().addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User currentUser = dataSnapshot.getValue(User.class);
-                    String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
-                    textUsername.setText(username);
+                    for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+
+                        if (userSnapshot.getKey().equals(getCurrentUser().getUid())){
+
+                            User currentUser = userSnapshot.getValue(User.class);
+                            String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
+                            textUsername.setText(username);
+                        }
+
+                    }
+
                 }
 
                 @Override

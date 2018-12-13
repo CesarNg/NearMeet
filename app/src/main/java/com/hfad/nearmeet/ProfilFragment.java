@@ -212,18 +212,22 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
             textViewEmail.setText(email);
 
             // 7 - Get additional data from Firestore (champRecherche & Username)
-            UserHelper.getUser(this.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            UserHelper.getUser().addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
 
                         User currentUser = userSnapshot.getValue(User.class);
-                        String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
-                        textInputEditTextUsername.setText(username);
-                        champRecherche = currentUser.getChampRecherche();
-                        spinner.setAdapter(dataAdapter);
-                        selectSpinnerChampRecherche(champRecherche);
+                        if (userSnapshot.getKey().equals(getCurrentUser().getUid())) {
+
+                            String username = TextUtils.isEmpty(currentUser.getUsername()) ? getString(R.string.info_no_username_found) : currentUser.getUsername();
+                            textInputEditTextUsername.setText(username);
+                            champRecherche = currentUser.getChampRecherche();
+                            spinner.setAdapter(dataAdapter);
+                            selectSpinnerChampRecherche(champRecherche);
+                        }
+
 
                     }
 

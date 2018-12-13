@@ -211,7 +211,7 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
     // --------------------
     // 4 - Get Current User from Firestore
     private void getCurrentUserFromFirestore(){
-        UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+       /* UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 modelCurrentUser = dataSnapshot.getValue(User.class);
@@ -222,13 +222,13 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
                 System.out.println("The read failed: " + databaseError.getCode());
             }
-        });
+        });*/
     }
 
     private void getUserReceiver(){
 
 
-        UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+        /*UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 modelUserReceiver = dataSnapshot.getValue(User.class);
@@ -239,7 +239,7 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
                 System.out.println("The read failed: " + databaseError.getCode());
             }
-        });
+        });*/
     }
 
     // --------------------

@@ -98,8 +98,8 @@ public class UserHelper {
 
     // Query
 
-    public static Query getUser(String uid){
-        return UserHelper.getDatabaseRef().child(uid);
+    public static Query getUser(){
+        return UserHelper.getDatabaseRef();
     }
 
 
