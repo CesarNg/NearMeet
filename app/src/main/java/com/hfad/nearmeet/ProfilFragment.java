@@ -150,9 +150,6 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         champRecherche = parent.getItemAtPosition(position).toString();
-
-        Toast.makeText(parent.getContext(), "Selected: " + champRecherche, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
