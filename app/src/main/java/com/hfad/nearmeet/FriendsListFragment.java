@@ -170,6 +170,8 @@ public class FriendsListFragment extends Fragment  {
                     for (DataSnapshot chatChildSnapchot : chatSnapshot.getChildren()){
 
                         Chat chat = chatChildSnapchot.getValue(Chat.class);
+
+                        if(chat.getUidMember1().equals(getCurrentUser().getUid())||chat.getUidMember1().equals(getCurrentUser().getUid()))
                         simpleViewModelList.add(chat);
                     }
 

@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.hfad.nearmeet.Model.Message;
 import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.MessageHelper;
+import com.hfad.nearmeet.api.UserHelper;
 import com.hfad.nearmeet.friend_chat.ChatAdapter;
 
 import java.util.ArrayList;
@@ -68,12 +69,6 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
     private ChatAdapter chatAdapter;
     private Context context;
-
-    @Nullable
-    private User modelCurrentUser;
-    private User modelUserReceiver;
-    private String currentChatName;
-    private String friendUID;
 
 
     // TODO: Rename and change types of parameters
@@ -165,7 +160,6 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
         }
 
-       // this.updateUIWhenCreating();
 
     }
 
@@ -207,7 +201,6 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
     private void configureRecyclerView(String chatName){
         //Track current chat name
-        this.currentChatName = chatName;
 
         MessageHelper.getAllMessageForChat().addValueEventListener(new ValueEventListener() {
 
@@ -241,6 +234,30 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
            }
        });
+
+        UserHelper.getUser().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot userData : dataSnapshot.getChildren()){
+
+                    if(uidReceiver.equals(userData.getKey())){
+
+                        User user = userData.getValue(User.class);
+                        userReceiverName.setText(user.getUsername());
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
 
 
     }

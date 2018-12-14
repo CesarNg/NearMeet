@@ -49,29 +49,33 @@ public class ListFriendsHolder extends RecyclerView.ViewHolder {
             friendUID = chat.getUidMember1();
 
         String finalFriendUID1 = friendUID;
-        UserHelper.getUser().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if(friendUID != null){
 
-                for (DataSnapshot userData : dataSnapshot.getChildren()){
+            UserHelper.getUser().addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    if(finalFriendUID1.equals(userData.getKey())){
+                    for (DataSnapshot userData : dataSnapshot.getChildren()){
 
-                        User user = userData.getValue(User.class);
-                        name_friend.setText(user.getUsername());
+                        if(finalFriendUID1.equals(userData.getKey())){
+
+                            User user = userData.getValue(User.class);
+                            name_friend.setText(user.getUsername());
+
+                        }
 
                     }
 
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
 
-            }
+            });
+        }
 
-        });
 
 
             String finalFriendUID = friendUID;
