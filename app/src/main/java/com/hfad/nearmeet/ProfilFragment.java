@@ -247,8 +247,11 @@ public class ProfilFragment extends Fragment implements AdapterView.OnItemSelect
                             champRecherche = currentUser.getChampRecherche();
                             spinner.setAdapter(dataAdapter);
                             selectSpinnerChampRecherche(champRecherche);
-                            interets = currentUser.getInterets();
-                            multiSpinner.setSelected(interets);
+                            if (currentUser.getInterets() != null) {
+                                interets = currentUser.getInterets();
+                                multiSpinner.setSelected(interets);
+                            }
+
                         }
 
 
