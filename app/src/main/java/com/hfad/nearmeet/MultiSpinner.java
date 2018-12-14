@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
 
 /**
  * Inspired by: http://stackoverflow.com/a/6022474/1521064
@@ -81,6 +84,18 @@ public class MultiSpinner extends android.support.v7.widget.AppCompatSpinner {
         this.listener = listener;
     }
 
+    public void setEntries(ArrayList<String> entrie)
+    {
+        entries =  entrie.toArray(new CharSequence[entrie.size()]);
+    }
+    public void setSelected(ArrayList<String> select)
+    {
+        for (int i = 0; i<entries.length; i++)
+        {
+            if (select.contains(entries[i])) selected[i] = true;
+            else selected[i] = false;
+        }
+    }
     public CharSequence[] getEntries() { return entries;}
 
     public interface MultiSpinnerListener {

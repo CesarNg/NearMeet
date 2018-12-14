@@ -357,15 +357,26 @@ public class HomeFragment extends Fragment  implements
 
                 @Override
                 public void onKeyExited(String documentID) {
-                    for (int i = 0; i<markers.size(); i++) {
-                        if (markers.get(i).getTitle().equals(documentID))
-                        {
-                            markers.get(i).remove();
-                        }
-                    }
-                    System.out.println(String.format("Document %s is no longer in the search area", documentID));
-                }
+                    final String docID = documentID;
+                    UserHelper.getUser().addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                                for (int i = 0; i<markers.size(); i++) {
+                                    if (markers.get(i).getTitle().equals(docID)) markers.get(i).remove();
+                                }
+                        }
+
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+                    System.out.println(String.format("Document %s is no longer in the search area", documentID));
+
+                }
                 @Override
                 public void onKeyMoved(String documentID, GeoPoint location) {
                     System.out.println(String.format("Document %s moved within the search area to [%f,%f]", documentID, location.getLatitude(), location.getLongitude()));

@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="startSingleMode"
-            android:text="Single Mode"
+            android:text="Mode solo"
             android:textAllCaps="false"
             android:textColor="#00BCD4"
             android:textSize="36sp" />
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:onClick="startMultilayer"
-            android:text="Multiplayer"
+            android:text="Multijoueur"
             android:textAllCaps="false"
             android:textColor="#3F51B5"
             android:textSize="36sp" />
@@ -71,7 +71,7 @@
                 android:minWidth="100dp"
                 android:visibility="gone"
                 android:layout_height="wrap_content"
-                android:hint="Name" />
+                android:hint="Nom" />
 
             <EditText
                 android:id="@+id/input_email"
@@ -80,7 +80,7 @@
                 android:minWidth="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:hint="Email" />
+                android:hint="Courriel" />
         </LinearLayout>
 
 
@@ -90,7 +90,7 @@
             android:minWidth="100dp"
             android:visibility="gone"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="Mot de passe"
             android:inputType="textPassword" />
 
         <Button
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:onClick="loginWithEmail"
-            android:text="Log in"
+            android:text="Connexion"
             android:textAllCaps="false"
             android:textColor="#000" />
 

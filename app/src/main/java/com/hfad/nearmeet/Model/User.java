@@ -45,6 +45,7 @@ public class User {
     public Geopoint getLocalisation() {
         return localisation;
     }
+
     public Boolean getIsVisible(){return isVisible;}
     public Boolean getIsOnline(){return isOnline;}
 
