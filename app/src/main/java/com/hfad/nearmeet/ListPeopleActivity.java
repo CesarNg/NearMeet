@@ -196,8 +196,9 @@ public class ListPeopleActivity extends AppCompatActivity  {
                 // set dialog message
                 alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent I = new Intent(ListPeopleActivity.this,StartActivity.class);
+                        Intent I = new Intent(ListPeopleActivity.this,GameActivity.class);
                         I.putExtra("opponent",guy);
+                        I.putExtra("type", "single");
                         startActivity(I);
                     }
                 });

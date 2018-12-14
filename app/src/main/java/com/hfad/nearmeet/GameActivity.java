@@ -3,7 +3,10 @@ package com.hfad.nearmeet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hfad.nearmeet.api.ChatHelper;
 import com.hfad.nearmeet.tic_tac_toe.Board;
 
 import butterknife.BindView;
@@ -21,6 +24,9 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         Bundle extras = getIntent().getExtras();
         String type = extras.getString("type");
+        String opponent = extras.getString("opponent");
+        ChatHelper.createChat(getCurrentUser().getUid(),opponent);
+
         if (type.equals("wifi")) {
             withId = extras.getString("withId");
             canvas.setWifiWith(withId);
@@ -33,4 +39,7 @@ public class GameActivity extends AppCompatActivity {
                     .setValue(null);
         }
     }
+
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
 }

@@ -378,7 +378,6 @@ public class Board extends FrameLayout {
                         }
                     }).start();
 
-                    ChatHelper.createChat(getCurrentUser().getUid(),"oUJf6F2RbsVZdD5AyESkGXeO5313");
 
                 }
             }, 500);
@@ -477,6 +476,5 @@ public class Board extends FrameLayout {
             isMyTurn = false;
         }
     }
-    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
 }
