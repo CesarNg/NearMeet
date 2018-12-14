@@ -15,7 +15,7 @@ public class FriendsHelper {
 
     public static Task<Void> createFriend(String chatUID, String userUID){
 
-        return getDatabaseRef().child(userUID).child(chatUID).setValue(null);
+        return getDatabaseRef().child(userUID).child(chatUID).child("count").setValue(0);
     }
 
     public static Query getFriend(){

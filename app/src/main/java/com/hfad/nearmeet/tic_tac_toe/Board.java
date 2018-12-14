@@ -27,11 +27,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hfad.nearmeet.R;
+import com.hfad.nearmeet.api.ChatHelper;
+import com.hfad.nearmeet.api.FriendsHelper;
 import com.hfad.nearmeet.tic_tac_toe.model_game.Point;
 import com.hfad.nearmeet.tic_tac_toe.model_game.Shape;
 import com.hfad.nearmeet.tic_tac_toe.model_game.Victory;
@@ -373,6 +377,9 @@ public class Board extends FrameLayout {
                             restart.setVisibility(VISIBLE);
                         }
                     }).start();
+
+                    ChatHelper.createChat(getCurrentUser().getUid(),"oUJf6F2RbsVZdD5AyESkGXeO5313");
+
                 }
             }, 500);
         }
@@ -470,4 +477,6 @@ public class Board extends FrameLayout {
             isMyTurn = false;
         }
     }
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
 }

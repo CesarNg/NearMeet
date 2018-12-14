@@ -21,18 +21,20 @@ public class MessageHelper {
     }
 
     public static Query getAllMessageForChat(){
-        return MessageHelper.getDatabaseRef().orderByChild("uid");
+        return MessageHelper.getDatabaseRef();
     }
 
 
 
 
-    public static Task<Void> createMessageForChat(String textMessage, String uidReceiver, String uidSender, String chatUID){
+    public static Task<Void> createMessageForChat(String textMessage, String uidSender, String uidReceiver, String chatUID){
 
         // 1 - Create the Message object
 
         String key = MessageHelper.getDatabaseRef().push().getKey();
         Message message = new Message(textMessage, uidSender, uidReceiver,key,null);
+
+        ChatHelper.updateLastMessage(textMessage, chatUID );
 
         return MessageHelper.getDatabaseRef().child(chatUID).child(key).setValue(message);
 

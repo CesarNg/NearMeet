@@ -37,10 +37,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.activity_friend_chat_item_message_container)
     RelativeLayout messageContainer;
     //IMAGE SENDED CONTAINER
-    @BindView(R.id.activity_friend_chat_item_message_container_image_sent_cardview)
-    CardView cardViewImageSent;
-    @BindView(R.id.activity_friend_chat_item_message_container_image_sent_cardview_image)
-    ImageView imageViewSent;
+
     //TEXT MESSAGE CONTAINER
     @BindView(R.id.activity_friend_chat_item_message_container_text_message_container)
     LinearLayout textMessageContainer;
@@ -111,10 +108,6 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         paramsLayoutContent.addRule(isSender ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF, R.id.activity_friend_chat_item_profile_container);
         this.messageContainer.setLayoutParams(paramsLayoutContent);
 
-        // CARDVIEW IMAGE SEND
-        RelativeLayout.LayoutParams paramsImageView = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        paramsImageView.addRule(isSender ? RelativeLayout.ALIGN_LEFT : RelativeLayout.ALIGN_RIGHT, R.id.activity_friend_chat_item_message_container_text_message_container);
-        this.cardViewImageSent.setLayoutParams(paramsImageView);
 
         this.rootView.requestLayout();
     }
