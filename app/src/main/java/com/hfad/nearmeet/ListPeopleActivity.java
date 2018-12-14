@@ -54,6 +54,7 @@ public class ListPeopleActivity extends AppCompatActivity  {
     private ArrayList<ArrayList<String>> peopleInterests;
     private ArrayList<String> myinterests;
     private ArrayList<String> idPeopleFiltered;
+    private ArrayList<String> namePeopleFiltered;
     private FirebaseUser user;
 
 
@@ -67,6 +68,7 @@ public class ListPeopleActivity extends AppCompatActivity  {
         myinterests = new ArrayList<>();
         peopleInterests = new ArrayList<>();
         idPeopleFiltered = new ArrayList<>();
+        namePeopleFiltered = new ArrayList<>();
 
 
 
@@ -134,6 +136,12 @@ public class ListPeopleActivity extends AppCompatActivity  {
                                 }
                             }
 
+                            final ArrayAdapter adapter = new ArrayAdapter(ListPeopleActivity.this, R.layout.simple_list_item,
+                                    R.id.firstLine, peoplesName);
+
+                            final ListView listview = findViewById(R.id.listview);
+                            listview.setAdapter(adapter);
+
                             MultiSpinner filtre = findViewById(R.id.multispinner);
                             filtre.setMultiSpinnerListener(new MultiSpinner.MultiSpinnerListener() {
                                 boolean filterEmpty = true;
@@ -146,19 +154,19 @@ public class ListPeopleActivity extends AppCompatActivity  {
                                             filterEmpty = false;
                                             for (int j = 0; j<peopleInterests.size(); j++)
                                             {
-                                                if (peopleInterests.get(j).contains(filtre.getEntries()[i])) {
-                                                    if (!idPeopleFiltered.contains(idPeopleNear.get(j))) {
-                                                        idPeopleFiltered.add(idPeopleNear.get(j));
-                                                    }
+                                                if (peopleInterests.get(j).contains(filtre.getEntries()[i]) && !idPeopleFiltered.contains(idPeopleNear.get(j))) {
+                                                    idPeopleFiltered.add(idPeopleNear.get(j));
+                                                    namePeopleFiltered.add(peoplesName.get(j));
+
                                                 }
                                             }
                                         }
                                     }
                                     ArrayAdapter adapterFiltered;
                                      if (!filterEmpty) adapterFiltered = new ArrayAdapter(ListPeopleActivity.this, R.layout.simple_list_item,
-                                            R.id.firstLine, idPeopleFiltered);
+                                            R.id.firstLine, namePeopleFiltered);
                                     else adapterFiltered = new ArrayAdapter(ListPeopleActivity.this, R.layout.simple_list_item,
-                                             R.id.firstLine, idPeopleNear);
+                                             R.id.firstLine, peoplesName);
                                     final ListView listview = findViewById(R.id.listview);
                                     listview.setAdapter(adapterFiltered);
                                     filterEmpty = true;
@@ -169,19 +177,15 @@ public class ListPeopleActivity extends AppCompatActivity  {
         }
 
         setContentView(R.layout.fragment_people);
+
+
         final ListView listview = findViewById(R.id.listview);
-
-
-        final ArrayAdapter adapter = new ArrayAdapter(this, R.layout.simple_list_item,
-                R.id.firstLine, idPeopleNear);
-        listview.setAdapter(adapter);
-
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String guy = (String) parent.getItemAtPosition(position);
+                final String guy = (String) idPeopleNear.get(position);
                 final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ListPeopleActivity.this);
 
                 final TextView et = new TextView(ListPeopleActivity.this);
@@ -192,7 +196,9 @@ public class ListPeopleActivity extends AppCompatActivity  {
                 // set dialog message
                 alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        StartGame();
+                        Intent I = new Intent(ListPeopleActivity.this,StartActivity.class);
+                        I.putExtra("opponent",guy);
+                        startActivity(I);
                     }
                 });
                 alertDialogBuilder.setCancelable(true).setNegativeButton("Return", new DialogInterface.OnClickListener() {
@@ -212,17 +218,8 @@ public class ListPeopleActivity extends AppCompatActivity  {
 
     }
 
-    public void defineFiltre(ArrayList<ArrayList<String>> peopleInterestss)
-    {
-
-    }
     public FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    public void StartGame() {
-        Intent I = new Intent(this,StartActivity.class);
-        //I.putExtra("opponent",guy);
-        startActivity(I);
-    }
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
         private final String[] values;
