@@ -19,26 +19,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.hfad.nearmeet.Model.Message;
 import com.hfad.nearmeet.Model.User;
 import com.hfad.nearmeet.api.MessageHelper;
 import com.hfad.nearmeet.api.UserHelper;
 import com.hfad.nearmeet.friend_chat.ChatAdapter;
-import com.hfad.nearmeet.friend_chat.FriendChatAdapter;
-import com.hfad.nearmeet.friend_chat.FriendListAdapter;
-import com.squareup.okhttp.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,16 +70,10 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
     private ChatAdapter chatAdapter;
     private Context context;
 
-    @Nullable
-    private User modelCurrentUser;
-    private User modelUserReceiver;
-    private String currentChatName;
-    private String friendUID;
-
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String chatUID;
+    private String uidReceiver;
 
     private OnFragmentInteractionListener mListener;
 
@@ -121,8 +107,8 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            chatUID = getArguments().getString(ARG_PARAM1);
+            uidReceiver = getArguments().getString(ARG_PARAM2);
         }
 
 
@@ -135,24 +121,13 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
         View view = inflater.inflate(R.layout.fragment_friend_chat, container, false);
         ButterKnife.bind(this,view);
-        friendUID = "UeXWHEY1rydaxNXC2VS1wL1IxDC3";
         this.textViewRecyclerViewEmpty.setVisibility(View.GONE);
         this.configureRecyclerView(CHAT_NAME_ANDROID);
-
-        this.getCurrentUserFromFirestore();
-        this.getUserReceiver();
 
 
         return view;
     }
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -175,128 +150,24 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
     public void onClickSendMessage() {
 
         // 1 - Check if text field is not empty and current user properly downloaded from Firestore
-        if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
+        if (!TextUtils.isEmpty(editTextMessage.getText())) {
             // 2 - Create a new Message to Firestore
-            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), modelCurrentUser.getUid(),modelUserReceiver.getUid()).addOnFailureListener(this.onFailureListener());
+            MessageHelper.createMessageForChat(editTextMessage.getText().toString(), getCurrentUser().getUid(),uidReceiver,chatUID).addOnFailureListener(this.onFailureListener());
             // 3 - Reset text field
             this.editTextMessage.setText("");
 
+
+
         }
 
-        this.updateUIWhenCreating();
 
     }
 
-   /* @OnClick({ R.id.activity_friend_chat_android_chat_button, R.id.activity_friend_chat_firebase_chat_button, R.id.activity_friend_chat_bug_chat_button})
-    public void onClickChatButtons(ImageButton imageButton) {
-        // 8 - Re-Configure the RecyclerView depending chosen chat
-        switch (Integer.valueOf(imageButton.getTag().toString())){
-            case 10:
-                this.configureRecyclerView(CHAT_NAME_ANDROID);
-                break;
-            case 20:
-                this.configureRecyclerView(CHAT_NAME_FIREBASE);
-                break;
-            case 30:
-                this.configureRecyclerView(CHAT_NAME_BUG);
-                break;
-        }
-    }*/
-
-    @OnClick(R.id.fragment_friend_chat_add_file_button)
-    public void onClickAddFile() { }
-
-    // --------------------
-    // REST REQUESTS
-    // --------------------
-    // 4 - Get Current User from Firestore
-    private void getCurrentUserFromFirestore(){
-       /* UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                modelCurrentUser = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });*/
-    }
-
-    private void getUserReceiver(){
-
-
-        /*UserHelper.getUser(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                modelUserReceiver = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });*/
-    }
-
-    // --------------------
-    // UI
-    // --------------------
-    // 5 - Configure RecyclerView with a Query
-    /*private void configureRecyclerView(String chatName){
-        //Track current chat name
-        this.currentChatName = chatName;
-        //Configure Adapter & RecyclerView
-        /*this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, getCurrentUser().getUid());
-       // this.FriendChatAdapter = new FriendChatAdapter(generateOptionsForAdapter(MessageHelper.getMessageForChat(this.currentChatName,friendUID)), Glide.with(this), this, getCurrentUser().getUid());
-        FriendChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                recyclerView.smoothScrollToPosition(FriendChatAdapter.getItemCount()); // Scroll to bottom on new messages
-            }
-        });*/
-
-
-
-
-
-   // }
-
-    // 6 - Create options for RecyclerView from a Query
-   /* private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query){
-        return new FirestoreRecyclerOptions.Builder<Message>()
-                .setQuery(query, Message.class)
-                .setLifecycleOwner(this)
-                .build();
-    }*/
 
     @Override
     public void onDataChanged() {
         textViewRecyclerViewEmpty.setVisibility(chatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
-
-    private void updateUIWhenCreating(){
-
-        if (this.getCurrentUser() != null){
-
-            //Get picture URL from Firebase
-            if (this.getCurrentUser().getPhotoUrl() != null) {
-                Glide.with(this)
-                        .load(this.getCurrentUser().getPhotoUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageViewPreview);
-            }
-
-
-//            this.userReceiverName.setText(modelUserReceiver.getUsername());
-
-        }
-    }
-
-
 
 
 
@@ -330,25 +201,31 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
     private void configureRecyclerView(String chatName){
         //Track current chat name
-        this.currentChatName = chatName;
-         List<Message> simpleViewModelList = new ArrayList<>();
 
-       MessageHelper.getAllMessageForChat().addValueEventListener(new ValueEventListener() {
+        MessageHelper.getAllMessageForChat().addValueEventListener(new ValueEventListener() {
 
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+               List<Message> simpleViewModelList = new ArrayList<>();
                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
 
-                   Message message = messageSnapshot.getValue(Message.class);
-                   simpleViewModelList.add(message);
+                   if(messageSnapshot.getKey().equals(chatUID)){
+
+                       for (DataSnapshot messageChildSnapshot : messageSnapshot.getChildren()){
+
+                           Message message = messageChildSnapshot.getValue(Message.class);
+                           simpleViewModelList.add(message);
+                       }
+                   }
+
                }
 
                chatAdapter = new ChatAdapter(simpleViewModelList, getCurrentUser().getUid());
                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                recyclerView.setHasFixedSize(true);
                recyclerView.setAdapter(chatAdapter);
-
+               recyclerView.smoothScrollToPosition(chatAdapter.getItemCount());
 
            }
 
@@ -357,6 +234,31 @@ public class FriendChatFragment extends Fragment implements ChatAdapter.Listener
 
            }
        });
+
+        UserHelper.getUser().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot userData : dataSnapshot.getChildren()){
+
+                    if(uidReceiver.equals(userData.getKey())){
+
+                        User user = userData.getValue(User.class);
+                        userReceiverName.setText(user.getUsername());
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
 
     }
 }

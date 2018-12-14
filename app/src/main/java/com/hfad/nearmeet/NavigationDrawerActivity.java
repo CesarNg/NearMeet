@@ -29,9 +29,10 @@ public class NavigationDrawerActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    public static NavigationDrawerActivity instance;
     private Fragment fragmentHome;
     private Fragment fragmentProfil;
-    private Fragment fragmentChat;
+    private Fragment fragmentListChat;
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_PROFIL = 1;
     private static final int FRAGMENT_CHAT = 2;
@@ -51,6 +52,7 @@ public class NavigationDrawerActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
+        instance = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -117,7 +119,7 @@ public class NavigationDrawerActivity extends BaseActivity
                 this.showProfilFragment();
                 break;
             case FRAGMENT_CHAT:
-                this.showChatFragment();
+                this.showListChatFragment();
                 break;
             default:
                 break;
@@ -134,14 +136,14 @@ public class NavigationDrawerActivity extends BaseActivity
         this.startTransactionFragment(this.fragmentProfil);
     }
 
-    private void showChatFragment(){
-        if (this.fragmentChat == null) this.fragmentChat = FriendChatFragment.newInstance(null,null);
-        this.startTransactionFragment(this.fragmentChat);
+    private void showListChatFragment(){
+        if (this.fragmentListChat == null) this.fragmentListChat = FriendsListFragment.newInstance(null,null);
+        this.startTransactionFragment(this.fragmentListChat);
     }
 
 
 
-    private void startTransactionFragment(Fragment fragment){
+    public void startTransactionFragment(Fragment fragment){
         if (!fragment.isVisible()){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.nav_frame_layout, fragment).commit();
